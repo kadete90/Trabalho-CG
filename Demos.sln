@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CGGL", "CGGL", "{A67FB9BD-8DF1-4F92-8125-E5C94F953709}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CGGL_Engine", "CGGL\CGGL_Engine\CGGL_Engine.vcxproj", "{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{372E7CF4-1E74-444C-9F29-2295D7AA3FCA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Jelly_v1", "CGGL\Jelly_v1\Jelly_v1.vcxproj", "{7A708FB2-E45F-4D82-81A1-99EDDDB8D9A8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4} = {8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4}.Debug|Win32.Build.0 = Debug|Win32
+		{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4}.Debug|x64.ActiveCfg = Debug|x64
+		{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4}.Debug|x64.Build.0 = Debug|x64
+		{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4}.Release|Win32.ActiveCfg = Release|Win32
+		{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4}.Release|Win32.Build.0 = Release|Win32
+		{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4}.Release|x64.ActiveCfg = Release|x64
+		{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4}.Release|x64.Build.0 = Release|x64
+		{7A708FB2-E45F-4D82-81A1-99EDDDB8D9A8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7A708FB2-E45F-4D82-81A1-99EDDDB8D9A8}.Debug|Win32.Build.0 = Debug|Win32
+		{7A708FB2-E45F-4D82-81A1-99EDDDB8D9A8}.Debug|x64.ActiveCfg = Debug|Win32
+		{7A708FB2-E45F-4D82-81A1-99EDDDB8D9A8}.Release|Win32.ActiveCfg = Release|Win32
+		{7A708FB2-E45F-4D82-81A1-99EDDDB8D9A8}.Release|Win32.Build.0 = Release|Win32
+		{7A708FB2-E45F-4D82-81A1-99EDDDB8D9A8}.Release|x64.ActiveCfg = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8184AD2A-7EA2-4F82-9636-0E8B8B8D14F4} = {A67FB9BD-8DF1-4F92-8125-E5C94F953709}
+		{372E7CF4-1E74-444C-9F29-2295D7AA3FCA} = {A67FB9BD-8DF1-4F92-8125-E5C94F953709}
+		{7A708FB2-E45F-4D82-81A1-99EDDDB8D9A8} = {372E7CF4-1E74-444C-9F29-2295D7AA3FCA}
+	EndGlobalSection
+EndGlobal

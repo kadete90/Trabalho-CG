@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="CGGL_Engine">
+</Property><Property Name="Solution File" Value="C:\ISEL\My Dropbox\CG\cguedes-CG-1112i-LI31DN-LI51DN-f168b5b\OpenGL\Demos\CGGL\CGGL_Engine\CGGL_Engine.sln">
+</Property><Property Name="Date" Value="quinta-feira, 5 de Janeiro de 2012">
+</Property><Property Name="Time" Value="09:10:36">
+</Property></Properties><Event ErrorLevel="0" Project="CGGL_Engine" Source="CGGL_Engine.vcproj" Description="Converting project file 'C:\ISEL\My Dropbox\CG\cguedes-CG-1112i-LI31DN-LI51DN-f168b5b\OpenGL\Demos\CGGL\CGGL_Engine\CGGL_Engine.vcproj'.">
+</Event><Event ErrorLevel="1" Project="CGGL_Engine" Source="CGGL_Engine.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="CGGL_Engine" Source="CGGL_Engine.vcproj" Description="Attribute 'Detect64BitPortabilityProblems' of 'VCCLCompilerTool' is not supported in this version and has been removed during conversion.">
+</Event><Event ErrorLevel="1" Project="CGGL_Engine" Source="CGGL_Engine.vcproj" Description="Attribute 'Detect64BitPortabilityProblems' of 'VCCLCompilerTool' is not supported in this version and has been removed during conversion.">
+</Event><Event ErrorLevel="0" Project="CGGL_Engine" Source="CGGL_Engine.vcproj" Description="Done converting to new project file 'C:\ISEL\My Dropbox\CG\cguedes-CG-1112i-LI31DN-LI51DN-f168b5b\OpenGL\Demos\CGGL\CGGL_Engine\CGGL_Engine.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="CGGL_Engine" Source="CGGL_Engine.vcproj" Description="Converted">
+</Event></UpgradeLog>

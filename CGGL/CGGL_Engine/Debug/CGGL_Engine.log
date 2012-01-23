@@ -1,0 +1,35 @@
+﻿Build started 1/23/2012 6:57:23 PM.
+     1>Project "D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\CGGL_Engine.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\CGGL_Engine.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       Lib:
+         All outputs are up-to-date.
+         CGGL_Engine.vcxproj -> D:\ISEL\CG\Trabalho-CG\\Dependencies\lib\CGGL_Engine.lib
+       PostBuildEvent:
+         copy "D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\*.h" "D:\ISEL\CG\Trabalho-CG\Dependencies\include\cggl\"
+         :VCEnd
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\App.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\Camera.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\FPSCounter.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\glm.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\Globals.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\GLTexture.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\Input.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\MathUtils.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\Model3DS.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\Object.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\ObjModel.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\SkyBox.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\TextureLoader.h
+         D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\src\TextWriter.h
+                14 ficheiro(s) copiado(s).
+       FinalizeBuildStatus:
+         Deleting file "Debug\CGGL_Engine.unsuccessfulbuild".
+         Touching "Debug\CGGL_Engine.lastbuildstate".
+     1>Done Building Project "D:\ISEL\CG\Trabalho-CG\CGGL\CGGL_Engine\CGGL_Engine.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.52

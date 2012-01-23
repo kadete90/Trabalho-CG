@@ -1,0 +1,65 @@
+﻿Build started 1/13/2012 11:01:11 AM.
+     1>Project "C:\Users\formiga\Documents\My Dropbox\CG\cguedes-CG-1112i-LI31DN-LI51DN-f168b5b\OpenGL\Demos\CGGL\CGGL_Engine\CGGL_Engine.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Release\CGGL_Engine.unsuccessfulbuild".
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt src\GLTexture.cpp src\Model3DS.cpp src\SkyBox.cpp src\TextureLoader.cpp
+         GLTexture.cpp
+     1>c:\users\formiga\documents\my dropbox\cg\cguedes-cg-1112i-li31dn-li51dn-f168b5b\opengl\demos\cggl\cggl_engine\src\GLTexture.h(43): fatal error C1083: Cannot open include file: 'gl\glaux.h': No such file or directory
+         Model3DS.cpp
+     1>c:\users\formiga\documents\my dropbox\cg\cguedes-cg-1112i-li31dn-li51dn-f168b5b\opengl\demos\cggl\cggl_engine\src\GLTexture.h(43): fatal error C1083: Cannot open include file: 'gl\glaux.h': No such file or directory
+         SkyBox.cpp
+     1>C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdlib.h(353): error C2381: 'exit' : redefinition; __declspec(noreturn) differs
+                 C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\include\GL/glut.h(146) : see declaration of 'exit'
+     1>src\SkyBox.cpp(14): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string.h(105) : see declaration of 'strcpy'
+         TextureLoader.cpp
+     1>src\TextureLoader.cpp(117): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string.h(105) : see declaration of 'strcpy'
+     1>src\TextureLoader.cpp(121): error C2664: 'GetCurrentDirectoryW' : cannot convert parameter 2 from 'char [261]' to 'LPWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(122): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string.h(110) : see declaration of 'strcat'
+     1>src\TextureLoader.cpp(123): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\string.h(110) : see declaration of 'strcat'
+     1>src\TextureLoader.cpp(129): error C2664: 'lstrcmpiW' : cannot convert parameter 1 from 'char [16]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(138): error C2664: 'lstrcmpiW' : cannot convert parameter 1 from 'char [16]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(142): error C2664: 'lstrcmpiW' : cannot convert parameter 1 from 'char [16]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(143): error C2664: 'lstrcmpiW' : cannot convert parameter 1 from 'char [16]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(147): error C2664: 'lstrcmpiW' : cannot convert parameter 1 from 'char [16]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(151): error C2664: 'lstrcmpiW' : cannot convert parameter 1 from 'char [16]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(155): error C2664: 'lstrcmpiW' : cannot convert parameter 1 from 'char [16]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(159): error C2664: 'lstrcmpiW' : cannot convert parameter 1 from 'char [16]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(178): error C2664: 'GetCurrentDirectoryW' : cannot convert parameter 2 from 'char [261]' to 'LPWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(179): error C2664: 'lstrcatW' : cannot convert parameter 1 from 'char [261]' to 'LPWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(187): error C2664: 'CreateFileW' : cannot convert parameter 1 from 'char [261]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(212): error C2664: 'DeleteFileW' : cannot convert parameter 1 from 'char [261]' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(235): error C2664: 'cggl::TextureLoader::LoadJPG_GIFResource' : cannot convert parameter 1 from 'LPWSTR' to 'char *'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(253): error C2664: 'cggl::TextureLoader::LoadTGAResource' : cannot convert parameter 1 from 'LPWSTR' to 'char *'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(761): error C2664: 'FindResourceW' : cannot convert parameter 2 from 'char *' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(910): error C2664: 'FindResourceW' : cannot convert parameter 2 from 'char *' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(1026): error C2664: 'lstrlenW' : cannot convert parameter 1 from 'char *' to 'LPCWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>src\TextureLoader.cpp(1043): error C2664: 'lstrcpyW' : cannot convert parameter 1 from 'char *' to 'LPWSTR'
+                 Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+     1>Done Building Project "C:\Users\formiga\Documents\My Dropbox\CG\cguedes-CG-1112i-LI31DN-LI51DN-f168b5b\OpenGL\Demos\CGGL\CGGL_Engine\CGGL_Engine.vcxproj" (build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:03.10
