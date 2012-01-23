@@ -2,22 +2,22 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="src">
-      <UniqueIdentifier>{7f069865-7aff-44fa-94a7-09ae3fbf5b9e}</UniqueIdentifier>
+      <UniqueIdentifier>{6b5b1364-e9f4-40f1-b374-a2d3e73e2cf5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Dependencies">
-      <UniqueIdentifier>{695a7ff5-d4c9-472f-b016-3b48afdfc062}</UniqueIdentifier>
+      <UniqueIdentifier>{8a6842fe-351a-4d69-ba65-d19d03950103}</UniqueIdentifier>
     </Filter>
     <Filter Include="Dependencies\Bin">
-      <UniqueIdentifier>{e03b92d9-d9cb-492c-b93f-f07170fccf28}</UniqueIdentifier>
+      <UniqueIdentifier>{4e0042b6-5a09-4fa7-a01a-c66483a191d8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Dependencies\Include">
-      <UniqueIdentifier>{60084231-8411-454a-bbc9-2d2d572ce1b9}</UniqueIdentifier>
+      <UniqueIdentifier>{3aaaa39b-70c7-45b0-9184-0caea8504221}</UniqueIdentifier>
     </Filter>
     <Filter Include="Dependencies\Include\GL">
-      <UniqueIdentifier>{675aa04d-df21-4ed7-ac41-7c5e6f4d1bc4}</UniqueIdentifier>
+      <UniqueIdentifier>{4010ec11-59e9-473a-b572-d9c391be2617}</UniqueIdentifier>
     </Filter>
     <Filter Include="Dependencies\Lib">
-      <UniqueIdentifier>{98239a92-ef90-496e-a553-52fbc5636b23}</UniqueIdentifier>
+      <UniqueIdentifier>{d51af84c-3ed0-4410-ad19-8d69b2e5d2c6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -118,26 +118,28 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuildStep Include="src\TextureLoader.htm">
+    <Library Include="..\..\Dependencies\lib\GlAux.Lib">
+      <Filter>Dependencies\Lib</Filter>
+    </Library>
+    <Library Include="..\..\Dependencies\lib\glew32.lib">
+      <Filter>Dependencies\Lib</Filter>
+    </Library>
+    <Library Include="..\..\Dependencies\lib\glut32.lib">
+      <Filter>Dependencies\Lib</Filter>
+    </Library>
+    <Library Include="..\..\Dependencies\lib\CGGL_Engine.lib">
+      <Filter>Dependencies\Lib</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Dependencies\bin\glew32.dll">
+      <Filter>Dependencies\Bin</Filter>
+    </None>
+    <None Include="..\..\Dependencies\bin\glut32.dll">
+      <Filter>Dependencies\Bin</Filter>
+    </None>
+    <None Include="src\TextureLoader.htm">
       <Filter>src</Filter>
-    </CustomBuildStep>
-    <CustomBuildStep Include="..\Dependencies\bin\glew32.dll">
-      <Filter>Dependencies\Bin</Filter>
-    </CustomBuildStep>
-    <CustomBuildStep Include="..\Dependencies\bin\glut32.dll">
-      <Filter>Dependencies\Bin</Filter>
-    </CustomBuildStep>
-    <CustomBuildStep Include="..\Dependencies\lib\GlAux.Lib">
-      <Filter>Dependencies\Lib</Filter>
-    </CustomBuildStep>
-    <CustomBuildStep Include="..\Dependencies\lib\glew32.lib">
-      <Filter>Dependencies\Lib</Filter>
-    </CustomBuildStep>
-    <CustomBuildStep Include="..\Dependencies\lib\glut.def">
-      <Filter>Dependencies\Lib</Filter>
-    </CustomBuildStep>
-    <CustomBuildStep Include="..\Dependencies\lib\glut32.lib">
-      <Filter>Dependencies\Lib</Filter>
-    </CustomBuildStep>
+    </None>
   </ItemGroup>
 </Project>
