@@ -1,8 +1,8 @@
 #include "ball.h" 
-
+#include "Jelly.h"
 using namespace cggl;
 
-Ball::Ball(Vector3 pos, float rad): position(pos), radius(rad){
+Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2 ): position(pos), radius(rad),j1(_j1),j2(_j2){
 	model = new ObjModel("models/whiteBall.obj");
 	radiusShadow = radius * (position.y > 4) ? position.y*.1/radius : 1/position.y*radius*0.8;
 	velocityToP1 = Vector3(-5,15,0);
@@ -72,6 +72,7 @@ void Ball::Update(int deltaTimeMilis){
     velocity.y = -velocity.y/2.5 ;
 	velocity.x = velocity.x/1.1 ;
   }
+   if(App::Input->IsKeyPressed('r')) {	position.y= 25;position.x=0;velocity = Vector3(1,6,0); }
 
   if(position.x >= 3.5 - radius){
 	  //check position player2
@@ -88,5 +89,12 @@ void Ball::Update(int deltaTimeMilis){
 	  }
 	  if(position.y >= 14.5 && position.y < 15)
 		  velocity.y = -velocity.y*1.3;
+  }
+
+  if (j1->hitJelly(position.x,position.y,position.z,radius) || j2->hitJelly(position.x,position.y,position.z,radius)){
+		velocity.x*=-1;
+		if (App::Input->IsKeyPressed('p')) velocity.y*=-1.3;
+		else velocity.y *=-1.05;
+		
   }
 }

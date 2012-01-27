@@ -9,6 +9,7 @@ class Jelly : public cggl::Object {
 
   cggl::Vector3 position;
   float width, height;
+  boolean jump,up;
   
 public: 
   Jelly(const cggl::Vector3& pos, const float width, const float height, int player);
@@ -17,7 +18,7 @@ public:
   void Draw();
 
   cggl::Vector3& GetPosition()  { return position; };
-  bool hitJelly(int y);
+  bool hitJelly(float x,float y, float z,int radius);
   void setPoint();
   int getPoints();
   void drawRectangle(float size, float angleXY, float x, float y);

@@ -14,7 +14,7 @@ void JellyApp::CreateScene() {
   RegisterObject(p1 = new Jelly(Vector3(-15, 0, 0), 3.5, 4, 1)) ;
   RegisterObject(p2 = new Jelly(Vector3(15, 0, 0), 3.5, 4, 2)) ;
   RegisterObject( net = new Net(Vector3(0, 6, 0), 40) ) ;
-  RegisterObject( ball = new Ball(Vector3(0, 20, 0), 1.2) );
+  RegisterObject( ball = new Ball(Vector3(0, 20, 0), 1.2,p1,p2) );
   RegisterObject( new SimplePlan(100, 100, 0, Vector3(0,0,0),Vector3(0,1,0),"textures/sandBeach2.jpg") ); // width, height, angle.x, pos, front, texture
   RegisterObject( new SimplePlan(100, 65, -90, Vector3(0,65,-100),Vector3(0,1,0),"textures/background.jpg") ); 
   RegisterObject( new FPSCounter() );

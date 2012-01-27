@@ -4,17 +4,19 @@
 #include <GL/glut.h>
 #include <cggl/App.h>
 #include <cggl/ObjModel.h>
+#include "Jelly.h"
 
 class Ball : public cggl::Object {
 	
   cggl::Vector3 position, positionToP1, positionToP2 ;
   cggl::Vector3 velocity, velocityToP1, velocityToP2; 
   float radius, radiusShadow, angle;
-
+  Jelly * j1;
+  Jelly * j2;
   cggl::ObjModel* model;
   
 public: 
-  Ball(cggl::Vector3 pos, float rad);
+  Ball(cggl::Vector3 pos, float rad, Jelly * _j1,Jelly * _j2 );
 
   void InitGL();
   void Update(int deltaTimeMilis);
