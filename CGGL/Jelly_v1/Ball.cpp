@@ -1,5 +1,6 @@
 #include "ball.h" 
 #include "Jelly.h"
+#include <Windows.h>
 using namespace cggl;
 
 Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2 ): position(pos), radius(rad),j1(_j1),j2(_j2){
@@ -74,6 +75,8 @@ void Ball::Update(int deltaTimeMilis){
   }
    if(App::Input->IsKeyPressed('r')) {	position.y= 25;position.x=0;velocity = Vector3(1,6,0); }
 
+
+
   if(position.x >= 3.5 - radius){
 	  //check position player2
   }
@@ -84,17 +87,42 @@ void Ball::Update(int deltaTimeMilis){
 
   else if(position.x >= -radius && position.x <= radius){
 	  if( position.y < 14.5){
-		  velocity.y = -velocity.y*1.3;
-		  velocity.x = -velocity.x*1.2;
+		  velocity.y = -velocity.y*0.8;
+		  velocity.x = -velocity.x*1;
 	  }
 	  if(position.y >= 14.5 && position.y < 15)
-		  velocity.y = -velocity.y*1.3;
+		  velocity.y = -velocity.y*1.1;
   }
 
-  if (j1->hitJelly(position.x,position.y,position.z,radius) || j2->hitJelly(position.x,position.y,position.z,radius)){
-		velocity.x*=-1;
-		if (App::Input->IsKeyPressed('p')) velocity.y*=-1.3;
-		else velocity.y *=-1.05;
-		
+  Vector3 vj1 = j1->hitJelly(position.x,position.y,position.z,radius);
+  Vector3 vj2 = j2->hitJelly(position.x,position.y,position.z,radius);
+  if (!(vj1.x==-1 && vj1.y==-1 && vj1.z==-1)){
+	  printf("player %d -> x %f y %f z %f\n",j1->getPlayer(),vj1.x,vj1.y,vj1.z);
+	  velocity.x*=vj1.x;
+	  velocity.y*=vj1.y;
+	  velocity.z*=vj1.z;
+  }
+  else if (!(vj2.x==-1 && vj2.y==-1 && vj2.z==-1)){
+	  printf("player %d ->x %f y %f z %f\n",j2->getPlayer(),vj2.x,vj2.y,vj2.z);
+	  velocity.x*=vj2.x;
+	  velocity.y*=vj2.y;
+	  velocity.z*=vj2.z;
+  }
+  /* Re-posicionamento da bola e contagem dos pontos */
+  if(position.y-radius==0) {
+	  boolean pontoJ1=false;
+	  if (position.x < -0 )
+		  if (position.x >=-35) j2->setPoint();
+		  else {j1->setPoint();pontoJ1=true;}
+	  else 
+		  if (position.x <= 35) {j1->setPoint();pontoJ1=true;}
+		  else j2->setPoint();
+
+		  /* #####		Apito do arbitro que indica que houve ponto		################
+		  PlaySound(TEXT("SOUNDS\\REFEREEWHISTLE.WAV"), NULL, SND_ASYNC);
+		  */
+
+		  if (pontoJ1) {position.y= 25;position.x=-25;velocity = Vector3(-2,6,0); }
+		  else {position.y= 25;position.x=25;velocity = Vector3(2,6,0); }
   }
 }

@@ -10,6 +10,8 @@ class Jelly : public cggl::Object {
   cggl::Vector3 position;
   float width, height;
   boolean jump,up;
+  int player;
+  int points;
   
 public: 
   Jelly(const cggl::Vector3& pos, const float width, const float height, int player);
@@ -18,12 +20,12 @@ public:
   void Draw();
 
   cggl::Vector3& GetPosition()  { return position; };
-  bool hitJelly(float x,float y, float z,int radius);
+  cggl::Vector3 hitJelly(float x,float y, float z,int radius);
   void setPoint();
   int getPoints();
+  int getPlayer();
   void drawRectangle(float size, float angleXY, float x, float y);
-  int player;
-  int points;
+  
 
 };
 

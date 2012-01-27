@@ -21,17 +21,32 @@ void JellyApp::CreateScene() {
 }
 
 void JellyApp::Draw() {
-  App::Draw();
+   App::Draw();
+   	int xScore = App::Writer->GetMaxX()/2, yScore = 60;
+	char txtP1[5];
+	char txtP2[5];
+	sprintf(txtP1, "%d", p1->getPoints());
+    sprintf(txtP2, "%d", p2->getPoints());
+    glColor3f(1, 1, 1);
+    App::Writer->BeginWriteText();
+    App::Writer->WriteText(xScore-50,  yScore, txtP1, GLUT_BITMAP_TIMES_ROMAN_24);
+	App::Writer->WriteImediateText(xScore, yScore, "-", GLUT_BITMAP_TIMES_ROMAN_24);
+    App::Writer->WriteText(xScore+50,  yScore, txtP2, GLUT_BITMAP_TIMES_ROMAN_24);
+    App::Writer->EndWriteText();
 }
 
 void JellyApp::Update(int deltaTimeMilis) {	
+
 	if(App::Input->IsKeyPressed('x')) exit(0);
 	if(App::Input->IsKeyPressed('c'))
 		App::Camera->LookAt(Vector3(0, 20, 50), ball->getPosition(), Vector3(0,1,0));
 	else
 		App::Camera->LookAt(Vector3(0, 20, 80), Vector3(0,20,0), Vector3(0,1,0));
 	App::Update(deltaTimeMilis);
+
 }
+
+
 
 int main(int argc, char** argv){
   JellyApp app;

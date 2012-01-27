@@ -6,6 +6,7 @@
 #include <cggl/ObjModel.h>
 #include "Jelly.h"
 
+
 class Ball : public cggl::Object {
 	
   cggl::Vector3 position, positionToP1, positionToP2 ;
