@@ -53,14 +53,18 @@ void Ball::Update(int deltaTimeMilis){
   double t = deltaTimeMilis/(float)1000;
   double mass = 1.5;
   double fg = mass * -9.8;
+  double fdz = -6*3.14*radius*0.00001827*velocity.z;
   double fdy = -6*3.14*radius*0.00001827*velocity.y;
   double fdx = -6*3.14*radius*0.00001827*velocity.x;
-
+  
   double ax = (fdx) / mass;
   double ay = (fg + fdy) / mass;
+  double az = (fdz)/mass;
 
+  velocity.z += az * t ;
   velocity.y += ay * t ;
   velocity.x += ax * t ;
+  
 
   position.y = position.y + velocity.y*t + 0.5 * ay * t * t;
   position.x += (velocity.x == 0) ? 0 : velocity.x*t;
@@ -98,16 +102,20 @@ void Ball::Update(int deltaTimeMilis){
   Vector3 vj2 = j2->hitJelly(position.x,position.y,position.z,radius);
   if (!(vj1.x==-1 && vj1.y==-1 && vj1.z==-1)){
 	  printf("player %d -> x %f y %f z %f\n",j1->getPlayer(),vj1.x,vj1.y,vj1.z);
-	  velocity.x*=vj1.x;
-	  velocity.y*=vj1.y;
-	  velocity.z*=vj1.z;
+	  velocity.x *= vj1.x;
+	  velocity.y *= vj1.y;
+	  position.y= j1->getHeight()*1.3;
+	  velocity.z *= vj1.z;
   }
   else if (!(vj2.x==-1 && vj2.y==-1 && vj2.z==-1)){
 	  printf("player %d ->x %f y %f z %f\n",j2->getPlayer(),vj2.x,vj2.y,vj2.z);
-	  velocity.x*=vj2.x;
-	  velocity.y*=vj2.y;
-	  velocity.z*=vj2.z;
+	  velocity.x *= vj2.x;
+	  velocity.y *= vj2.y;
+	  velocity.z *= vj2.z;
+	  	  position.y= j2->getHeight()*1.2;
+	  position.y= j2->getHeight();
   }
+
   /* Re-posicionamento da bola e contagem dos pontos */
   if(position.y-radius==0) {
 	  boolean pontoJ1=false;

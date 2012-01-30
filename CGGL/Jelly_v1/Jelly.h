@@ -24,6 +24,8 @@ public:
   void setPoint();
   int getPoints();
   int getPlayer();
+  int Jelly::getHeight();
+  int Jelly::getWidth();
   void drawRectangle(float size, float angleXY, float x, float y);
   
 

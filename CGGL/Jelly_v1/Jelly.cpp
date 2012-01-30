@@ -1,4 +1,5 @@
 #include "Jelly.h" 
+#include "math.h"
 
 using namespace cggl;
 
@@ -75,20 +76,17 @@ void Jelly::Update(int deltaTimeMilis){
 }
 
 cggl::Vector3 Jelly::hitJelly(float x,float y, float z, int radius){
-	if (x-radius < (position.x + width) && x+radius > (position.x - width) &&
-		y-radius < (position.y + height) && y-radius > 0 &&
-		z-radius < (position.z + width) && z+radius > (position.z - width) )
-		return Vector3(position.x-x,position.y+height-y,position.z-z);
+	if (x-radius <= (position.x + width) && x+radius >= (position.x - width) &&
+		y-radius <= (position.y + height)&& y-radius >=position.y &&
+		z-radius <= (position.z + width) && z+radius >= (position.z - width) ){
 
+		return Vector3(- (fabs(position.x)-fabs(x)),position.y+height-y,position.z-z); 
+	}
 	return Vector3(-1,-1,-1);
 }
 
-int Jelly::getPoints() {
-	return points;
-}
-int Jelly::getPlayer() {
-	return player;
-}
-void Jelly::setPoint(){
-	points++;
-}
+int Jelly::getPoints(){ return points;}
+int Jelly::getPlayer(){	return player;}
+int Jelly::getHeight(){ return height;}
+int Jelly::getWidth() { return width; }
+void Jelly::setPoint(){	points++;}
