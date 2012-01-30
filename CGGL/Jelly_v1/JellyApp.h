@@ -14,4 +14,5 @@ public:
   void CreateScene();
   void Draw();
   void Update(int deltaTimeMilis);
+  void teste();
 };
