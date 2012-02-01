@@ -41,7 +41,7 @@ void JellyApp::Update(int deltaTimeMilis) {
 	if(App::Input->IsKeyPressed('c'))
 		App::Camera->LookAt(Vector3(0, 20, 50), ball->getPosition(), Vector3(0,1,0));
 	else
-		App::Camera->LookAt(Vector3(0, 20, 80), Vector3(0,20,0), Vector3(0,1,0));
+		App::Camera->LookAt(Vector3(0, 20, 90), Vector3(0,20,0), Vector3(0,1,0));
 	App::Update(deltaTimeMilis);
 
 }

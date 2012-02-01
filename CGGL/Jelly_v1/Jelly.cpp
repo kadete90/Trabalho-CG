@@ -5,6 +5,7 @@ using namespace cggl;
 
 Jelly::Jelly(const Vector3& pos, const float _width, const float _height, const int _player) 
 	: position(pos), width(_width),height(_height), player(_player) {
+		
 		jump = false;
 		up=true;
 		points =0;
@@ -75,18 +76,24 @@ void Jelly::Update(int deltaTimeMilis){
 	 }
 }
 
-cggl::Vector3 Jelly::hitJelly(float x,float y, float z, int radius){
-	if (x-radius <= (position.x + width) && x+radius >= (position.x - width) &&
-		y-radius <= (position.y + height)&& y-radius >=position.y &&
-		z-radius <= (position.z + width) && z+radius >= (position.z - width) ){
+cggl::Vector3 Jelly::hitJelly(float x,float y, float z, float radius){
+float eq;
+	eq = pow((x - position.x),2) + pow((y - (position.y+height)),2) + pow((z - position.z),2) - (height*height);
 
-		return Vector3(- (fabs(position.x)-fabs(x)),position.y+height-y,position.z-z); 
+	if(eq <= 0 ) {
+		printf("%f |Y %f | pos.y %f | height %f \n",eq,y,position.y,height);
+		printf("pos.x %f | pos.y %f | pos.z %f \n",position.x,position.y,position.z);
+		printf("ret x %f ref y %f ret z %f \n ", - (fabs(position.x)-fabs(x)),- (y/(position.y+height*2)),position.z-z);
+		
+		return Vector3( fabs(position.x)-fabs(x),- (y/(position.y+height*2)+0.1),position.z-z);
 	}
-	return Vector3(-1,-1,-1);
+
+else return Vector3(-1,-1,-1);
+
 }
 
 int Jelly::getPoints(){ return points;}
 int Jelly::getPlayer(){	return player;}
 int Jelly::getHeight(){ return height;}
-int Jelly::getWidth() { return width; }
+int Jelly::getWidth (){ return width; }
 void Jelly::setPoint(){	points++;}

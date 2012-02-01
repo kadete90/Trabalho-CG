@@ -15,6 +15,9 @@ class Ball : public cggl::Object {
   Jelly * j1;
   Jelly * j2;
   cggl::ObjModel* model;
+  int hitTimeBlock;
+  bool dirLeft;
+  int lastPosX;
   
 public: 
   Ball(cggl::Vector3 pos, float rad, Jelly * _j1,Jelly * _j2 );

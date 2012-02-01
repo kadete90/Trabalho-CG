@@ -20,7 +20,7 @@ public:
   void Draw();
 
   cggl::Vector3& GetPosition()  { return position; };
-  cggl::Vector3 hitJelly(float x,float y, float z,int radius);
+  cggl::Vector3 hitJelly(float x,float y, float z,float radius);
   void setPoint();
   int getPoints();
   int getPlayer();
