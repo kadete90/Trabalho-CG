@@ -81,11 +81,10 @@ float eq;
 	eq = pow((x - position.x),2) + pow((y - (position.y+height)),2) + pow((z - position.z),2) - (height*height);
 
 	if(eq <= 0 ) {
-		printf("%f |Y %f | pos.y %f | height %f \n",eq,y,position.y,height);
+		/*printf("%f |Y %f | pos.y %f | height %f \n",eq,y,position.y,height);
 		printf("pos.x %f | pos.y %f | pos.z %f \n",position.x,position.y,position.z);
-		printf("ret x %f ref y %f ret z %f \n ", - (fabs(position.x)-fabs(x)),- (y/(position.y+height*2)),position.z-z);
-		
-		return Vector3( fabs(position.x)-fabs(x),- (y/(position.y+height*2)+0.1),position.z-z);
+		printf("ret x %f ref y %f ret z %f \n ", - (fabs(position.x)-fabs(x)),- (y/(position.y+height*2)),position.z-z);*/
+		return Vector3(fabs(position.x)-fabs(x),-(y/(position.y+height*2)+0.1),position.z-z);
 	}
 
 else return Vector3(-1,-1,-1);
