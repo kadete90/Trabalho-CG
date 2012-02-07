@@ -5,10 +5,12 @@ using namespace cggl;
 
 Jelly::Jelly(const Vector3& pos, const float _width, const float _height, const int _player) 
 	: position(pos), width(_width),height(_height), player(_player) {
-		
-		jump = false;
-		up=true;
-		points =0;
+	bodyRadius = .75;
+	//headRadius = .55;
+	radiusShadow = bodyRadius * width*.8 + position.y*0.1;
+	jump = false;
+	points = 0;
+	highJump = 20;
 }
 
 void Jelly::Draw(){
@@ -23,20 +25,18 @@ void Jelly::Draw(){
 
 	  static GLfloat GreenPlayer[3] = { 0.1, 0.9, 0.1 };
 	  static GLfloat RedPlayer[3]   = { 0.9, 0.1, 0.1 };
-	  static GLfloat bodyRadius = .75;
-	  static GLfloat headRadius = .55;
 	  static GLint sphereSlicesAndStacks = 30;
 
-	  glColor3fv((player==1)?GreenPlayer:RedPlayer);
-	  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, (player==1)?GreenPlayer:RedPlayer);
+	  glColor3fv((player==1) ? GreenPlayer : RedPlayer);
+	  glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, (player==1) ? GreenPlayer : RedPlayer);
 
 	  // draw body sphere
 	  glPushMatrix();
 		  glTranslated(0, bodyRadius, 0);
 		  glutSolidSphere(bodyRadius, sphereSlicesAndStacks, sphereSlicesAndStacks);
 	  glPopMatrix();
-
-	 /* // draw head 
+		/*
+	  // draw head 
 	  glPushMatrix();
 		  glTranslated(0, bodyRadius * 2 + headRadius/2, 0);
 		  glColor3fv((player==1)?GreenPlayer:RedPlayer);
@@ -45,35 +45,60 @@ void Jelly::Draw(){
 	  glPopMatrix();
 	  */
 	  glDisable(GL_LIGHTING);
-  glPopMatrix();
+	  glPopMatrix();
+
+	  // draw shadow
+	  glPushMatrix();
+		  glColor3f(.2, .2, .2 );
+		  glTranslated(position.x, .01, position.z);
+		  glRotated(90,1,0,0);
+		  glBegin(GL_POLYGON);
+		  float numPoints = 20, aux;
+		  for(int i = 0; i < numPoints; i++) {    
+			  aux = i*2*3.14159/numPoints;
+			  glVertex2f(cos(aux)*radiusShadow,sin(aux)*radiusShadow);
+		  }
+		  glEnd();
+	   glPopMatrix();
 }
 
 void Jelly::Update(int deltaTimeMilis){
   Object::Update(deltaTimeMilis);
-  int MIN_Z = -15, MAX_Z=15,MIN_X=3.5,MAX_X=40;
+  if (jump){
+		velocity.y = highJump;
+		jump = false;
+  }
+  float velocityxz = (position.y > 0)? .15: .25;
+
+  if( player == 1 ){
+	  if(App::Input->IsKeyPressed('a') && position.x >= -35) { position.x -= velocityxz; }
+	  else if(App::Input->IsKeyPressed('d') && position.x <= -3.5) { position.x += velocityxz; }
+	  if(App::Input->IsKeyPressed('w') && position.z >= -14) { position.z -= velocityxz; }
+	  else if(App::Input->IsKeyPressed('s') && position.z <= 12) { position.z += velocityxz; }
+	  if(App::Input->IsKeyPressed('e') && position.y == 0 && jump == false){ jump = true;}
+ }
+  else if( player == 2 ){
+	  if(App::Input->IsSpecialKeyPressed(GLUT_KEY_LEFT) && position.x >= 3.5) { position.x -= velocityxz; }
+	  else if(App::Input->IsSpecialKeyPressed(GLUT_KEY_RIGHT) && position.x <= 35) { position.x += velocityxz; }
+	  if(App::Input->IsSpecialKeyPressed(GLUT_KEY_UP) && position.z >= -14) { position.z -= velocityxz; }
+	  else if(App::Input->IsSpecialKeyPressed(GLUT_KEY_DOWN) && position.z <= 12) { position.z += velocityxz; }
+	  if(App::Input->IsKeyPressed('ç') && position.y == 0 && jump == false){jump = true; }
+  }
 
   double t = deltaTimeMilis/(float)1000;
+  double mass = 0.1;
+  double fg = mass * -9.8;
+  double fdy = -6*3.14*bodyRadius*0.00002*velocity.y;
+  double ay = (fg + fdy) / mass;
 
-	if (jump){
-		if (position.y<10 && up)position+=Vector3(0,.2,0);
-		else if (position.y>0){ position-=Vector3(0,.2,0); up =false;}
-		else if (position.y <=0) {position.y=0;jump=false;up=true;}
-	}
-  if( player == 1 ){
-	  if(App::Input->IsKeyPressed('a') && position.x >= -MAX_X) { position.x -= 0.4; }
-	  else if(App::Input->IsKeyPressed('d') && position.x <= -MIN_X) { position.x += 0.4; }
-	  if(App::Input->IsKeyPressed('w') && position.z >= MIN_Z) { position.z -= 0.4; }
-	  else if(App::Input->IsKeyPressed('s') && position.z <= MAX_Z) { position.z += 0.4; }
-
-	  if(App::Input->IsKeyPressed('e') && jump == false) {jump = true; }
+  if(position.y > 0 || velocity.y == highJump) {
+	  float aux = (velocity.y > 0 )? 1.8 :3;
+	  velocity += ay * t *aux;
+	  position.y += velocity.y*t + 0.5 * ay * t * t;
   }
-  else if( player == 2 ){
-	  if(App::Input->IsSpecialKeyPressed(GLUT_KEY_LEFT) && position.x >= MIN_X) {	position.x -= 0.4; }
-	  else if(App::Input->IsSpecialKeyPressed(GLUT_KEY_RIGHT) && position.x <= MAX_X) { position.x += 0.4;}
-	  if(App::Input->IsSpecialKeyPressed(GLUT_KEY_UP) && position.z >= MIN_Z) { position.z -= 0.4; }
-	  else if(App::Input->IsSpecialKeyPressed(GLUT_KEY_DOWN) && position.z <= MAX_Z) { position.z += 0.4; }
-	   if(App::Input->IsKeyPressed('ç') && jump == false) {jump = true; }
-	 }
+  if(position.y <0) position.y =0;
+  radiusShadow = bodyRadius * width*.8 + position.y*0.1;
+  
 }
 
 cggl::Vector3 Jelly::hitJelly(float x,float y, float z, float radius){
@@ -81,9 +106,9 @@ float eq;
 	eq = pow((x - position.x),2) + pow((y - (position.y+height)),2) + pow((z - position.z),2) - (height*height);
 
 	if(eq <= 0 ) {
-		/*printf("%f |Y %f | pos.y %f | height %f \n",eq,y,position.y,height);
+		printf("%f |Y %f | pos.y %f | height %f \n",eq,y,position.y,height);
 		printf("pos.x %f | pos.y %f | pos.z %f \n",position.x,position.y,position.z);
-		printf("ret x %f ref y %f ret z %f \n ", - (fabs(position.x)-fabs(x)),- (y/(position.y+height*2)),position.z-z);*/
+		printf("ret x %f ref y %f ret z %f \n ", - (fabs(position.x)-fabs(x)),- (y/(position.y+height*2)),position.z-z);
 		return Vector3(fabs(position.x)-fabs(x),-(y/(position.y+height*2)+0.1),position.z-z);
 	}
 

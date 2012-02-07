@@ -7,11 +7,11 @@
 
 class Jelly : public cggl::Object {
 
-  cggl::Vector3 position;
-  float width, height;
-  boolean jump,up;
-  int player;
-  int points;
+  cggl::Vector3 position, velocity;
+  float width, height, radiusShadow;
+  boolean jump;
+  int player, points, highJump;
+  GLfloat bodyRadius;//, headRadius;
   
 public: 
   Jelly(const cggl::Vector3& pos, const float width, const float height, int player);
@@ -27,7 +27,6 @@ public:
   int Jelly::getHeight();
   int Jelly::getWidth();
   void drawRectangle(float size, float angleXY, float x, float y);
-  
 
 };
 

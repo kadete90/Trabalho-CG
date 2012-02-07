@@ -1,20 +1,19 @@
 #include "ball.h" 
 #include "Jelly.h"
 #include <Windows.h>
+
 using namespace cggl;
 
 Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2 ): position(pos), radius(rad),j1(_j1),j2(_j2){
 	model = new ObjModel("models/whiteBall.obj");
-	radiusShadow = radius * (position.y > 4) ? position.y*.1/radius : 1/position.y*radius*0.8;
-	velocityToP1 = Vector3(-5,15,0);
-	velocityToP2 = Vector3(5,15,0);
+	radiusShadow = radius * .8 + position.y*.05;
+	velocity = Vector3(-5,15,1);
 	angle = 20;
 	hitTimeBlock =0;
 }
 
 void Ball::InitGL() { 
 	Object::InitGL();
-	velocity = velocityToP1;
 	model->InitGL();
 }
 
@@ -43,6 +42,7 @@ void Ball::Draw(){
 	}
 	glEnd(); 
 	glPopMatrix();
+
 	glDisable(GL_LIGHTING);
 }
 
@@ -52,28 +52,32 @@ void Ball::Update(int deltaTimeMilis){
 	double t = deltaTimeMilis/(float)1000;
 	double mass = 1.5;
 	double fg = mass * -9.8;
-	double fdz = -6*3.14*radius*0.00001827*velocity.z;
-	double fdy = -6*3.14*radius*0.00001827*velocity.y;
 	double fdx = -6*3.14*radius*0.00001827*velocity.x;
+	double fdy = -6*3.14*radius*0.00001827*velocity.y;
+	double fdz = -6*3.14*radius*0.00001827*velocity.z;
 
 	double ax = (fdx) / mass;
 	double ay = (fg + fdy) / mass;
 	double az = (fdz)/mass;
 
-	velocity.z += az * t ;
-	velocity.y += ay * t ;
 	velocity.x += ax * t ;
+	velocity.y += ay * t ;
+	velocity.z += az * t ;
 
 	position.y = position.y + velocity.y*t + 0.5 * ay * t * t;
-	position.x += (velocity.x == 0) ? 0 : velocity.x*t;
+	position.x += velocity.x*t;
+	if(App::Input->IsKeyPressed('g')) {position.z += 1; }
+	else if(App::Input->IsKeyPressed('f')) {position.z -= 1; }
+	else position.z += velocity.z*t;
+
 
 	boolean hitBlock=false;
 
 	Vector3 vj1 = j1->hitJelly(position.x,position.y,position.z,radius);
 	Vector3 vj2 = j2->hitJelly(position.x,position.y,position.z,radius);
 
-		if(hitTimeBlock <= 0){
-		
+	if(hitTimeBlock <= 0){
+
 		if (!(vj1.x==-1 && vj1.y==-1 && vj1.z==-1)){
 			hitBlock=true;
 
@@ -84,9 +88,9 @@ void Ball::Update(int deltaTimeMilis){
 				if(velocity.x <0)velocity.x = velocity.x*vj1.x*-1;
 				else velocity.x = velocity.x*vj1.x;
 			}
-			
+
 			velocity.y *= vj1.y;
-			velocity.z *= vj1.z;
+			velocity.z = vj1.z;
 		}
 		else if (!(vj2.x==-1 && vj2.y==-1 && vj2.z==-1)){ 
 
@@ -98,15 +102,15 @@ void Ball::Update(int deltaTimeMilis){
 				else velocity.x = velocity.x*vj2.x*-1;
 			}
 			velocity.y *= vj1.y;
-			velocity.z *= vj1.z;
+			velocity.z = vj1.z;
 		}
 	}
 
 	if(hitBlock) hitTimeBlock = 30;
 	else --hitTimeBlock;
-	
+
 	angle -= velocity.x;
-	radiusShadow = radius * (position.y > 4) ? position.y*.1/radius : 1/position.y*radius*1;
+	radiusShadow = radius * .8 + position.y*.05;
 
 	if(position.y <= radius){
 		position.y = radius;
@@ -114,8 +118,8 @@ void Ball::Update(int deltaTimeMilis){
 		velocity.x = velocity.x/1.1 ;
 	}
 
-	if(App::Input->IsKeyPressed('r')) {	position.y= 25;position.x=15;velocity = Vector3(1,6,0); }
-	if(App::Input->IsKeyPressed('t')) {	position.y= 25;position.x=-15;velocity = Vector3(1,6,0); }
+	if(App::Input->IsKeyPressed('r')) {	position.y= 25;position.x=15;position.z=0;velocity = Vector3(1,6,0); }
+	if(App::Input->IsKeyPressed('t')) {	position.y= 25;position.x=-15;position.z=0;velocity = Vector3(1,6,0); }
 
 	if(position.x >= -radius && position.x <= radius){
 		if( position.y < 14.5){
@@ -125,13 +129,8 @@ void Ball::Update(int deltaTimeMilis){
 		if(position.y >= 14.5 && position.y < 15)
 			velocity.y = -velocity.y*1.1;
 	}
-	
-
 	//if(vj1.x != -1 || vj2.x != -1)printf("xpoint1: %f  || xpoint2: %f \n", vj1.x, vj2.x); 
 
-
-	/* hitTimeBlock serve para que não seja possivel existirem vários eventos num curto espaço de tempo *resolve problema do salto */
-	/* Re-posicionamento da bola e contagem dos pontos */
 	if(position.y-radius==0) {
 		boolean pontoJ1=false;
 		if (position.x < -0 )
