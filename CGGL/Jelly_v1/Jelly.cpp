@@ -68,20 +68,32 @@ void Jelly::Update(int deltaTimeMilis){
 		velocity.y = highJump;
 		jump = false;
   }
-  float velocityxz = (position.y > 0)? .15: .25;
+  float velocityxz = (position.y > 0)? .3: .35;
+  /*
+  int xMax = 50;
+  int xMin = 3.5;
+  int zMax = 25;
+  int zMin = -25;
+  */
+  int xMax = 80;
+  int xMin = 3.5;
+  int zMax = 40;
+  int zMin = -40;
+  
 
+  printf("player %d z %f \n",player, position.z);
   if( player == 1 ){
-	  if(App::Input->IsKeyPressed('a') && position.x >= -35) { position.x -= velocityxz; }
-	  else if(App::Input->IsKeyPressed('d') && position.x <= -3.5) { position.x += velocityxz; }
-	  if(App::Input->IsKeyPressed('w') && position.z >= -14) { position.z -= velocityxz; }
-	  else if(App::Input->IsKeyPressed('s') && position.z <= 12) { position.z += velocityxz; }
+	  if(App::Input->IsKeyPressed('a') && position.x >= - xMax) { position.x -= velocityxz; }
+	  else if(App::Input->IsKeyPressed('d') && position.x <= -xMin) { position.x += velocityxz; }
+	  if(App::Input->IsKeyPressed('w') && position.z >= zMin) { position.z -= velocityxz; }
+	  else if(App::Input->IsKeyPressed('s') && position.z <= zMax) { position.z += velocityxz; }
 	  if(App::Input->IsKeyPressed('e') && position.y == 0 && jump == false){ jump = true;}
  }
   else if( player == 2 ){
-	  if(App::Input->IsSpecialKeyPressed(GLUT_KEY_LEFT) && position.x >= 3.5) { position.x -= velocityxz; }
-	  else if(App::Input->IsSpecialKeyPressed(GLUT_KEY_RIGHT) && position.x <= 35) { position.x += velocityxz; }
-	  if(App::Input->IsSpecialKeyPressed(GLUT_KEY_UP) && position.z >= -14) { position.z -= velocityxz; }
-	  else if(App::Input->IsSpecialKeyPressed(GLUT_KEY_DOWN) && position.z <= 12) { position.z += velocityxz; }
+	  if(App::Input->IsSpecialKeyPressed(GLUT_KEY_LEFT) && position.x >= xMin) { position.x -= velocityxz; }
+	  else if(App::Input->IsSpecialKeyPressed(GLUT_KEY_RIGHT) && position.x <= xMax) { position.x += velocityxz; }
+	  if(App::Input->IsSpecialKeyPressed(GLUT_KEY_UP) && position.z >= zMin) { position.z -= velocityxz; }
+	  else if(App::Input->IsSpecialKeyPressed(GLUT_KEY_DOWN) && position.z <= zMax) { position.z += velocityxz; }
 	  if(App::Input->IsKeyPressed('ç') && position.y == 0 && jump == false){jump = true; }
   }
 
@@ -92,7 +104,7 @@ void Jelly::Update(int deltaTimeMilis){
   double ay = (fg + fdy) / mass;
 
   if(position.y > 0 || velocity.y == highJump) {
-	  float aux = (velocity.y > 0 )? 1.8 :3;
+	  float aux = (velocity.y > 0 )? 1.8 :5;
 	  velocity += ay * t *aux;
 	  position.y += velocity.y*t + 0.5 * ay * t * t;
   }
@@ -106,9 +118,10 @@ float eq;
 	eq = pow((x - position.x),2) + pow((y - (position.y+height)),2) + pow((z - position.z),2) - (height*height);
 
 	if(eq <= 0 ) {
-		printf("%f |Y %f | pos.y %f | height %f \n",eq,y,position.y,height);
+	/*	printf("%f |Y %f | pos.y %f | height %f \n",eq,y,position.y,height);
 		printf("pos.x %f | pos.y %f | pos.z %f \n",position.x,position.y,position.z);
 		printf("ret x %f ref y %f ret z %f \n ", - (fabs(position.x)-fabs(x)),- (y/(position.y+height*2)),position.z-z);
+		*/
 		return Vector3(fabs(position.x)-fabs(x),-(y/(position.y+height*2)+0.1),position.z-z);
 	}
 

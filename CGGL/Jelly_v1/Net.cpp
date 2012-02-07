@@ -18,7 +18,7 @@ void Net::Draw(){
   glEnable(GL_LIGHT0);
 
   glPushMatrix();
-    glTranslated(position.x, position.y, position.z);
+	glTranslated(position.x, position.y, position.z);
 	glScaled(size,size,size);
     model->Draw();
   glPopMatrix();

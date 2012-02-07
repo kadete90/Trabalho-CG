@@ -1,12 +1,11 @@
-# Blender MTL File: ''
-# Material Count: 1
 newmtl Material
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.344706 0.123596 0.043566
+Kd 1.000000 1.000000 1.000000
 Ks 0.752941 0.752941 0.752941
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd D:\ISEL\CG\Trabalho-CG\CGGL\Jelly_v1\models\rede.jpg
 
 

@@ -10,6 +10,7 @@ Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2 ): position(pos), rad
 	velocity = Vector3(-5,15,1);
 	angle = 20;
 	hitTimeBlock =0;
+	playerLastHit  =-1;
 }
 
 void Ball::InitGL() { 
@@ -69,18 +70,19 @@ void Ball::Update(int deltaTimeMilis){
 	if(App::Input->IsKeyPressed('g')) {position.z += 1; }
 	else if(App::Input->IsKeyPressed('f')) {position.z -= 1; }
 	else position.z += velocity.z*t;
-
-
 	boolean hitBlock=false;
 
 	Vector3 vj1 = j1->hitJelly(position.x,position.y,position.z,radius);
 	Vector3 vj2 = j2->hitJelly(position.x,position.y,position.z,radius);
 
+	
+	float INCREASE_X_VELOCITY = 1.2;
+
 	if(hitTimeBlock <= 0){
 
 		if (!(vj1.x==-1 && vj1.y==-1 && vj1.z==-1)){
 			hitBlock=true;
-
+			playerLastHit=1;
 			if(vj1.x>0){
 				if(velocity.x <0)velocity.x = velocity.x*vj1.x*-1;
 				else velocity.x = velocity.x*vj1.x;
@@ -88,21 +90,29 @@ void Ball::Update(int deltaTimeMilis){
 				if(velocity.x <0)velocity.x = velocity.x*vj1.x*-1;
 				else velocity.x = velocity.x*vj1.x;
 			}
-
-			velocity.y *= vj1.y;
-			velocity.z = vj1.z;
+			velocity.x*=INCREASE_X_VELOCITY;
+			if (velocity.y<0)
+				velocity.y *= vj1.y;
+			velocity.z = -vj1.z;
 		}
 		else if (!(vj2.x==-1 && vj2.y==-1 && vj2.z==-1)){ 
+			/*
+						Praqué que é isto oh meu ?!?!?!
+			*/
+			hitBlock=true;
+			playerLastHit=2;
 
 			if(vj2.x>0){
-				if(velocity.x <0)velocity.x = velocity.x*vj2.x;
-				else velocity.x = velocity.x*vj2.x*-1;
+				if(velocity.x <0)velocity.x = vj2.x;
+				else velocity.x = vj2.x*-1;
 			}else{
-				if(velocity.x <0)velocity.x = velocity.x*vj2.x;
-				else velocity.x = velocity.x*vj2.x*-1;
+				if(velocity.x <0)velocity.x = vj2.x;
+				else velocity.x = vj2.x*-1;
 			}
-			velocity.y *= vj1.y;
-			velocity.z = vj1.z;
+			velocity.x*=INCREASE_X_VELOCITY;
+			if (velocity.y<0)
+				velocity.y *= vj1.y;
+			velocity.z = -vj2.z;
 		}
 	}
 
@@ -123,7 +133,7 @@ void Ball::Update(int deltaTimeMilis){
 
 	if(position.x >= -radius && position.x <= radius){
 		if( position.y < 14.5){
-			velocity.y = -velocity.y*0.8;
+			velocity.y = velocity.y*0.8;
 			velocity.x = -velocity.x*1;
 		}
 		if(position.y >= 14.5 && position.y < 15)
@@ -134,17 +144,19 @@ void Ball::Update(int deltaTimeMilis){
 	if(position.y-radius==0) {
 		boolean pontoJ1=false;
 		if (position.x < -0 )
-			if (position.x >=-35) j2->setPoint();
-			else {j1->setPoint();pontoJ1=true;}
+			if (position.x >=-35 && position.z >=-17 && position.z<=17) j2->setPoint();
+			else if (playerLastHit==2) {j1->setPoint();pontoJ1=true;}
+			else j2->setPoint();
 		else 
-			if (position.x <= 35) {j1->setPoint();pontoJ1=true;}
+			if (position.x <= 35 && position.z >=-17 && position.z<=17) {j1->setPoint();pontoJ1=true;}
+			else if (playerLastHit==2) {j1->setPoint();pontoJ1=true;}
 			else j2->setPoint();
 
-			/* #####		Apito do arbitro que indica que houve ponto		################
-			PlaySound(TEXT("SOUNDS\\REFEREEWHISTLE.WAV"), NULL, SND_ASYNC);
-			*/
+			// #####		Apito do arbitro que indica que houve ponto		################
+			//PlaySound(TEXT("SOUNDS\\REFEREEWHISTLE.WAV"), NULL, SND_ASYNC);
+			
 
-			if (pontoJ1) {position.y= 25;position.x=-25;velocity = Vector3(-2,6,0); }
-			else {position.y= 25;position.x=25;velocity = Vector3(2,6,0); }
+			if (pontoJ1) {position.y= 25;position.x=-25;position.z=0;velocity = Vector3(-2,6,0); }
+			else {position.y= 25;position.x=25;position.z=0;velocity = Vector3(2,6,0); }
 	}
 }
