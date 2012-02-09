@@ -143,6 +143,7 @@
   <ItemGroup>
     <None Include="..\..\Dependencies\bin\glew32.dll" />
     <None Include="..\..\Dependencies\bin\glut32.dll" />
+    <None Include="..\..\Dependencies\lib\glut.def" />
     <None Include="src\TextureLoader.htm">
       <DeploymentContent>true</DeploymentContent>
     </None>

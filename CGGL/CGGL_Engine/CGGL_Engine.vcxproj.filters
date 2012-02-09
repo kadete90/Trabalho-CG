@@ -127,18 +127,21 @@
     <None Include="..\..\Dependencies\bin\glut32.dll">
       <Filter>Dependencies\Bin</Filter>
     </None>
+    <None Include="..\..\Dependencies\lib\glut.def">
+      <Filter>Dependencies\Lib</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\Dependencies\lib\glew32.lib">
-      <Filter>Dependencies\Lib</Filter>
-    </Library>
-    <Library Include="..\..\Dependencies\lib\glut32.lib">
-      <Filter>Dependencies\Lib</Filter>
-    </Library>
     <Library Include="..\..\Dependencies\lib\CGGL_Engine.lib">
       <Filter>Dependencies\Lib</Filter>
     </Library>
     <Library Include="..\..\Dependencies\lib\GlAux.Lib">
+      <Filter>Dependencies\Lib</Filter>
+    </Library>
+    <Library Include="..\..\Dependencies\lib\glew32.lib">
+      <Filter>Dependencies\Lib</Filter>
+    </Library>
+    <Library Include="..\..\Dependencies\lib\glut32.lib">
       <Filter>Dependencies\Lib</Filter>
     </Library>
   </ItemGroup>

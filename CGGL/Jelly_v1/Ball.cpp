@@ -4,13 +4,17 @@
 #include <dos.h> // ter o SLEEP
 using namespace cggl;
 
-Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2 ): position(pos), radius(rad),j1(_j1),j2(_j2){
+Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2,bool* _gameOver ): position(pos), radius(rad),j1(_j1),j2(_j2),gameOver(_gameOver){
 	model = new ObjModel("models/whiteBall.obj");
 	radiusShadow = radius * .8 + position.y*.05;
-	velocity = Vector3(-5,15,0);
+	positionToP1 = Vector3(-25,25,0);
+	positionToP2 = Vector3(25,25,0);
+	velocityToP1 = Vector3(4,6,0); 
+	velocityToP2 = Vector3(-4,6,0);
 	angleZ = 20;
 	angleX =0;
 	hitTimeBlock =0;
+	strenghHit = 2,5;
 	fstHitGround = false;
 	playerLastHit  =-1;
 }
@@ -18,6 +22,10 @@ Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2 ): position(pos), rad
 void Ball::InitGL() { 
 	Object::InitGL();
 	model->InitGL();
+	int r = rand()%2;
+	velocity = (r)? velocityToP1: velocityToP2;
+	position = (r)? positionToP1: positionToP2;
+
 }
 
 void Ball::Draw(){
@@ -53,105 +61,115 @@ void Ball::Draw(){
 void Ball::Update(int deltaTimeMilis){
 	Object::Update(deltaTimeMilis);
 
-	double t = deltaTimeMilis/(float)1000;
-	double mass = 1.5;
-	double fg = mass * -9.8;
-	double fdx = -6*3.14*radius*0.00001827*velocity.x;
-	double fdy = -6*3.14*radius*0.00001827*velocity.y;
-	double fdz = -6*3.14*radius*0.00001827*velocity.z;
 
-	double ax = (fdx) / mass;
-	double ay = (fg + fdy) / mass;
-	double az = (fdz)/mass;
+	if (!(*gameOver)){
+		double t = deltaTimeMilis/(float)1000;
+		double mass = 1.5;
+		double fg = mass * -9.8;
+		double fdx = -6*3.14*radius*0.00001827*velocity.x;
+		double fdy = -6*3.14*radius*0.00001827*velocity.y;
+		double fdz = -6*3.14*radius*0.00001827*velocity.z;
 
-	velocity.x += ax * t ;
-	velocity.y += ay * t ;
-	velocity.z += az * t ;
+		double ax = (fdx) / mass;
+		double ay = (fg + fdy) / mass;
+		double az = (fdz)/mass;
 
-	position.y = position.y + velocity.y*t + 0.5 * ay * t * t;
-	position.x += velocity.x*t;
+		velocity.x += 2*(ax * t);
+		velocity.y += 2*(ay * t);
+		velocity.z += 2*(az * t);
 
-	if(App::Input->IsKeyPressed('g')) {position.z += 1; }
-	else if(App::Input->IsKeyPressed('f')) {position.z -= 1; }
-	else position.z += velocity.z*t;
-	boolean hitBlock=false;
+		position.y = position.y + velocity.y*t + 0.5 * ay * t * t;
+		position.x += velocity.x*t;
+		position.z += velocity.z*t;
 
-	Vector3 vj1 = j1->hitJelly(position.x,position.y,position.z);
-	Vector3 vj2 = j2->hitJelly(position.x,position.y,position.z);
+		boolean hitBlock=false;
 
-	float INCREASE_X_VELOCITY = 1.2;
+		Vector3 vj1 = j1->hitJelly(position.x,position.y,position.z);
+		Vector3 vj2 = j2->hitJelly(position.x,position.y,position.z);
 
-	if(hitTimeBlock <= 0 && !fstHitGround ){
+		if(hitTimeBlock <= 0 && !fstHitGround ){
+			if (!(vj1.x==-10 && vj1.y==-10 && vj1.z==-10)){
+				hitBlock=true;
+				playerLastHit = 1;
+				velocity.x = vj1.x * strenghHit;
+				velocity.y*= vj1.y * strenghHit;
+				velocity.z = -vj1.z * strenghHit;
+			}
 
-		if (!(vj1.x==-10 && vj1.y==-10 && vj1.z==-10)){
-			hitBlock=true;
-			playerLastHit = 1;
-			velocity.x = vj1.x* INCREASE_X_VELOCITY;
-			velocity.y *= vj1.y;
-			velocity.z = -vj1.z;
+			if (!(vj2.x==-10 && vj2.y==-10 && vj2.z==-10)){ 
+				hitBlock=true;
+				playerLastHit=2;
+				if(velocity.x >0) velocity.x = vj2.x*-1; 
+				else velocity.x = vj2.x*-1;
+				velocity.x*= vj2.x * strenghHit;
+				velocity.y*= vj2.y * strenghHit;
+				velocity.z =-vj2.z * strenghHit;
+			}
 		}
 
-		if (!(vj2.x==-10 && vj2.y==-10 && vj2.z==-10)){ 
-			hitBlock=true;
-			playerLastHit=2;
-			if(velocity.x >0) velocity.x = vj2.x*-1; 
-			else velocity.x = vj2.x*-1;
-			velocity.x*= INCREASE_X_VELOCITY;
-			velocity.y *= vj2.y;
-			velocity.z = -vj2.z;
+
+		if(hitBlock) hitTimeBlock = 20;
+		else --hitTimeBlock;
+
+		angleZ -= velocity.x;
+		angleX -= -velocity.z;
+		radiusShadow = radius * .8 + position.y*.05;
+
+		if(position.y <= radius){
+			position.y = radius;
+			velocity.y = -velocity.y/2.5 ;
+			velocity.x = velocity.x/1.2 ;
+			velocity.z = velocity.z/1.2 ;
 		}
-	}
-
-
-	if(hitBlock) hitTimeBlock = 90;
-	else --hitTimeBlock;
-
-	angleZ -= velocity.x;
-	angleX -= -velocity.z;
-	radiusShadow = radius * .8 + position.y*.05;
-
-	if(position.y <= radius){
-		position.y = radius;
-		velocity.y = -velocity.y/2.5 ;
-		velocity.x = velocity.x/1.1 ;
-		velocity.z = velocity.z/1.1 ;
-	}
-
-	if(App::Input->IsKeyPressed('r')) {	position.y= 25;position.x=15;position.z=0;velocity = Vector3(1,6,0); }
-	if(App::Input->IsKeyPressed('t')) {	position.y= 25;position.x=-15;position.z=0;velocity = Vector3(1,6,0); }
-
-	if(position.x >= -radius && position.x <= radius){
-		if( position.y < 14.5 && position.z >= -17 && position.z <=17){
-			velocity.y = velocity.y*0.8;
-			velocity.x = -velocity.x*1;
+		if(position.x >= -radius && position.x <= radius){
+			if( position.y < 15-radius && position.z >= -17 && position.z <=17){
+				printf("Erro! 1");
+				velocity.y = velocity.y*0.8;
+				velocity.x = (position.y >10)?-velocity.x: -velocity.x*0.5;
+			}
+			else if(position.y >= 15-radius && position.y < 15 && position.z > -17 && position.z < 17){
+				velocity.y = -velocity.y;
+				printf("Erro! 2");
+			}
 		}
-		if(position.y >= 14.5 && position.y < 15 && position.z >= -17 && position.z <=17)
-			velocity.y = -velocity.y*1.1;
-	}
 
-	if(position.y - radius <= 0){
-		if(!fstHitGround){
-			lastPosHitGround = position;
-			fstHitGround = true;
+		if(position.y - radius <= 0){
+			if(!fstHitGround){
+				lastPosHitGround = position;
+				fstHitGround = true;
+			}
+			else if(velocity.x <= .15 && velocity.x >= -.15 && velocity.z <= .15 && velocity.z >= -.15 && fstHitGround) {
+				boolean pontoJ1 = false;
+				if (lastPosHitGround.x < 0 )
+					if (lastPosHitGround.x >=-35 && lastPosHitGround.z >=-17 && lastPosHitGround.z<=17) j2->setPoint();
+					else if (playerLastHit == 2) {j1->setPoint();pontoJ1 = true;}
+					else j2->setPoint();
+				else 
+					if (lastPosHitGround.x <= 35 && lastPosHitGround.z >=-17 && lastPosHitGround.z<=17) {j1->setPoint(); pontoJ1 = true;}
+					else if (playerLastHit == 2) {j1->setPoint();pontoJ1 = true;}
+					else j2->setPoint();
+
+					// #####		Apito do arbitro que indica que houve ponto		################
+					PlaySound(TEXT("SOUNDS\\REFEREEWHISTLE.WAV"), NULL, SND_ASYNC);
+
+					fstHitGround = false;
+
+
+					if (pontoJ1) {
+						position = positionToP1; 
+						velocity = velocityToP1;
+					}
+					else {
+						position = positionToP2; 
+						velocity = velocityToP2; 
+					}
+			}
 		}
-		else if(velocity.x <= .15 && velocity.x >= -.15 && velocity.z <= .15 && velocity.z >= -.15 && fstHitGround) {
-			boolean pontoJ1 = false;
-			if (lastPosHitGround.x < 0 )
-				if (lastPosHitGround.x >=-35 && lastPosHitGround.z >=-17 && lastPosHitGround.z<=17) j2->setPoint();
-				else if (playerLastHit == 2) {j1->setPoint();pontoJ1 = true;}
-				else j2->setPoint();
-			else 
-				if (lastPosHitGround.x <= 35 && lastPosHitGround.z >=-17 && lastPosHitGround.z<=17) {j1->setPoint(); pontoJ1 = true;}
-				else if (playerLastHit == 2) {j1->setPoint();pontoJ1 = true;}
-				else j2->setPoint();
 
-				// #####		Apito do arbitro que indica que houve ponto		################
-				//PlaySound(TEXT("SOUNDS\\REFEREEWHISTLE.WAV"), NULL, SND_ASYNC);
-
-				fstHitGround = false;
-
-				if (pontoJ1) {position.y= 25;position.x=-25;position.z=0;velocity = Vector3(-2,6,0); }
-				else {position.y= 25;position.x=25;position.z=0;velocity = Vector3(2,6,0); }
-		}
+		if(velocity.x > 15) velocity.x = 15;
+		else if(velocity.x < -15) velocity.x = -15;
+		if(velocity.y > 28) velocity.y = 28;
+		if(velocity.z > 15) velocity.z = 15;
+		else if(velocity.z < -15) velocity.z = -15;
 	}
 }

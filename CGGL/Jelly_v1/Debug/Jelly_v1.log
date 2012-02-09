@@ -1,11 +1,10 @@
-﻿Build started 1/26/2012 10:00:48 PM.
-     1>Project "D:\ISEL\CG\Trabalho-CG\CGGL\Jelly_v1\Jelly_v1.vcxproj" on node 3 (build target(s)).
+﻿Build started 2/9/2012 10:32:35 PM.
+     1>Project "D:\ISEL\CG\Trabalho-CG\CGGL\Jelly_v1\Jelly_v1.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Jelly_v1.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"D:\ISEL\CG\Trabalho-CG\dependencies\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /D _CRT_SECURE_NO_WARNINGS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Jelly.cpp
          Jelly.cpp
-     1>d:\isel\cg\trabalho-cg\cggl\jelly_v1\jelly.cpp(53): warning C4805: '==' : unsafe mix of type 'boolean' and type 'bool' in operation
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -34,4 +33,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.78
+Time Elapsed 00:00:03.03

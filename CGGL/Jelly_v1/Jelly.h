@@ -10,15 +10,15 @@ class Jelly : public cggl::Object {
   cggl::Vector3 position, velocity;
   float width, height, radiusShadow, heigthVariable, widthVariable, hitTimeGround;
   boolean jump, hitTheGround;
-  int player, points, velocityJump;
+  int player, points, velocityJump,touchNumber;
   GLfloat bodyRadius;
   GLint sphereSlicesAndStacks;
- 
+  bool * gameOver;
   
   
 public: 
   char leftKey, rightKey, upKey, downKey, jumpKey;
-  Jelly(const cggl::Vector3& pos, const float width, const float height, int player,char leftKey, char rightKey,char upKey, char downKey, char jumpKey);
+  Jelly(const cggl::Vector3& pos, const float width, const float height, int player,bool * gameOver,char leftKey, char rightKey,char upKey, char downKey, char jumpKey);
 
   void Update(int deltaTimeMilis);
   void Draw();
@@ -26,6 +26,7 @@ public:
   cggl::Vector3& GetPosition()  { return position; };
   cggl::Vector3 hitJelly(float x,float y, float z);
   void setPoint();
+   void resetPoint();
   int getPoints();
   int getPlayer();
   int Jelly::getHeight();
@@ -36,7 +37,10 @@ public:
   char getUpKey();
   char getDownKey();
   char getJumpKey();
-
+  void increaseTouchNumber();
+  void resetTouchNumber();
+  boolean hasWon();
+  int getTouchNumber();
 };
 
 #endif
