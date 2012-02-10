@@ -16,7 +16,11 @@ Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2,bool* _gameOver ): po
 	hitTimeBlock =0;
 	strenghHit = 2,5;
 	fstHitGround = false;
+	startPlay = true;
 	playerLastHit  =-1;
+	startPlayP1='q';
+	startPlayP2='l';
+	maxHitsPerPlayer=5;
 }
 
 void Ball::InitGL() { 
@@ -74,102 +78,138 @@ void Ball::Update(int deltaTimeMilis){
 		double ay = (fg + fdy) / mass;
 		double az = (fdz)/mass;
 
-		velocity.x += 2*(ax * t);
-		velocity.y += 2*(ay * t);
-		velocity.z += 2*(az * t);
+		Vector3 vj1 = NULL;
+		Vector3 vj2 = NULL;
 
-		position.y = position.y + velocity.y*t + 0.5 * ay * t * t;
-		position.x += velocity.x*t;
-		position.z += velocity.z*t;
-
-		boolean hitBlock=false;
-
-		Vector3 vj1 = j1->hitJelly(position.x,position.y,position.z);
-		Vector3 vj2 = j2->hitJelly(position.x,position.y,position.z);
-
-		if(hitTimeBlock <= 0 && !fstHitGround ){
-			if (!(vj1.x==-10 && vj1.y==-10 && vj1.z==-10)){
-				hitBlock=true;
-				playerLastHit = 1;
-				velocity.x = vj1.x * strenghHit;
-				velocity.y*= vj1.y * strenghHit;
-				velocity.z = -vj1.z * strenghHit;
-			}
-
-			if (!(vj2.x==-10 && vj2.y==-10 && vj2.z==-10)){ 
-				hitBlock=true;
-				playerLastHit=2;
-				if(velocity.x >0) velocity.x = vj2.x*-1; 
-				else velocity.x = vj2.x*-1;
-				velocity.x*= vj2.x * strenghHit;
-				velocity.y*= vj2.y * strenghHit;
-				velocity.z =-vj2.z * strenghHit;
-			}
+		if (startPlay && position.x == positionToP1.x && position.y == positionToP1.y && position.z == positionToP1.z){
+			if(App::Input->IsKeyPressed(startPlayP1)) { startPlay=false;}
 		}
-
-
-		if(hitBlock) hitTimeBlock = 20;
-		else --hitTimeBlock;
-
-		angleZ -= velocity.x;
-		angleX -= -velocity.z;
-		radiusShadow = radius * .8 + position.y*.05;
-
-		if(position.y <= radius){
-			position.y = radius;
-			velocity.y = -velocity.y/2.5 ;
-			velocity.x = velocity.x/1.2 ;
-			velocity.z = velocity.z/1.2 ;
+		else if (startPlay &&  position.x == positionToP2.x && position.y == positionToP2.y && position.z == positionToP2.z){
+			if(App::Input->IsKeyPressed(startPlayP2)) { startPlay=false;}
 		}
-		if(position.x >= -radius && position.x <= radius){
-			if( position.y < 15-radius && position.z >= -17 && position.z <=17){
-				printf("Erro! 1");
-				velocity.y = velocity.y*0.8;
-				velocity.x = (position.y >10)?-velocity.x: -velocity.x*0.5;
-			}
-			else if(position.y >= 15-radius && position.y < 15 && position.z > -17 && position.z < 17){
-				velocity.y = -velocity.y;
-				printf("Erro! 2");
-			}
-		}
+		else{
 
-		if(position.y - radius <= 0){
-			if(!fstHitGround){
-				lastPosHitGround = position;
-				fstHitGround = true;
-			}
-			else if(velocity.x <= .15 && velocity.x >= -.15 && velocity.z <= .15 && velocity.z >= -.15 && fstHitGround) {
-				boolean pontoJ1 = false;
-				if (lastPosHitGround.x < 0 )
-					if (lastPosHitGround.x >=-35 && lastPosHitGround.z >=-17 && lastPosHitGround.z<=17) j2->setPoint();
-					else if (playerLastHit == 2) {j1->setPoint();pontoJ1 = true;}
-					else j2->setPoint();
-				else 
-					if (lastPosHitGround.x <= 35 && lastPosHitGround.z >=-17 && lastPosHitGround.z<=17) {j1->setPoint(); pontoJ1 = true;}
-					else if (playerLastHit == 2) {j1->setPoint();pontoJ1 = true;}
-					else j2->setPoint();
-
-					// #####		Apito do arbitro que indica que houve ponto		################
-					PlaySound(TEXT("SOUNDS\\REFEREEWHISTLE.WAV"), NULL, SND_ASYNC);
-
-					fstHitGround = false;
+			velocity.x += 2*(ax * t);
+			velocity.y += 2*(ay * t);
+			velocity.z += 2*(az * t);
 
 
-					if (pontoJ1) {
+
+			position.y = position.y + velocity.y*t + 0.5 * ay * t * t;
+			position.x += velocity.x*t;
+			position.z += velocity.z*t;
+
+			boolean hitBlock=false;
+
+			if(hitTimeBlock <= 0 && !fstHitGround ){
+				vj1 = j1->hitJelly(position.x,position.y,position.z);
+				vj2 = j2->hitJelly(position.x,position.y,position.z);
+
+				if (!(vj1.x==-10 && vj1.y==-10 && vj1.z==-10)){
+					hitBlock=true;
+					if (playerLastHit ==1 ) lastPlayerNumberOfHits++;
+					else					lastPlayerNumberOfHits=1;
+					if (lastPlayerNumberOfHits == maxHitsPerPlayer){
+						PlaySound(TEXT("SOUNDS\\FOUL.WAV"), NULL, SND_ASYNC);
+						j2->setPoint();
+						position = positionToP2; 
+						velocity = velocityToP2;
+						startPlay=true;
+					}
+
+					playerLastHit = 1;
+					velocity.x = vj1.x * strenghHit;
+					velocity.y*= vj1.y * strenghHit;
+					velocity.z = -vj1.z * strenghHit;
+				}
+
+				if (!(vj2.x==-10 && vj2.y==-10 && vj2.z==-10)){ 
+					hitBlock=true;
+
+					if (playerLastHit ==2 ) lastPlayerNumberOfHits++;
+					else					lastPlayerNumberOfHits=1;
+					if (lastPlayerNumberOfHits == maxHitsPerPlayer){
+						PlaySound(TEXT("SOUNDS\\FOUL.WAV"), NULL, SND_ASYNC);
+						j1->setPoint();
 						position = positionToP1; 
 						velocity = velocityToP1;
+						startPlay=true;
 					}
-					else {
-						position = positionToP2; 
-						velocity = velocityToP2; 
-					}
+					playerLastHit=2;
+					if(velocity.x >0) velocity.x = vj2.x*-1; 
+					else velocity.x = vj2.x*-1;
+					velocity.x*= vj2.x * strenghHit;
+					velocity.y*= vj2.y * strenghHit;
+					velocity.z =-vj2.z * strenghHit;
+				}
 			}
-		}
 
-		if(velocity.x > 15) velocity.x = 15;
-		else if(velocity.x < -15) velocity.x = -15;
-		if(velocity.y > 28) velocity.y = 28;
-		if(velocity.z > 15) velocity.z = 15;
-		else if(velocity.z < -15) velocity.z = -15;
+
+			if(hitBlock) hitTimeBlock = 20;
+			else --hitTimeBlock;
+
+			angleZ -= velocity.x;
+			angleX -= -velocity.z;
+			radiusShadow = radius * .8 + position.y*.05;
+
+			if(position.y <= radius){
+				position.y = radius;
+				velocity.y = -velocity.y/2.5 ;
+				velocity.x = velocity.x/1.2 ;
+				velocity.z = velocity.z/1.2 ;
+			}
+			if(position.x >= -radius && position.x <= radius){
+				if( position.y < 15-radius && position.z >= -17 && position.z <=17){
+					printf("Erro! 1");
+					velocity.y = velocity.y*0.8;
+					velocity.x = (position.y >10)?-velocity.x: -velocity.x*0.5;
+				}
+				else if(position.y >= 15-radius && position.y < 15 && position.z > -17 && position.z < 17){
+					velocity.y = -velocity.y;
+					printf("Erro! 2");
+				}
+			}
+
+			if(position.y - radius <= 0){
+				if(!fstHitGround){
+					lastPosHitGround = position;
+					fstHitGround = true;
+				}
+				else if(velocity.x <= .15 && velocity.x >= -.15 && velocity.z <= .15 && velocity.z >= -.15 && fstHitGround) {
+					boolean pontoJ1 = false;
+					if (lastPosHitGround.x < 0 )
+						if (lastPosHitGround.x >=-35 && lastPosHitGround.z >=-17 && lastPosHitGround.z<=17) j2->setPoint();
+						else if (playerLastHit == 2) {j1->setPoint();pontoJ1 = true;}
+						else j2->setPoint();
+					else 
+						if (lastPosHitGround.x <= 35 && lastPosHitGround.z >=-17 && lastPosHitGround.z<=17) {j1->setPoint(); pontoJ1 = true;}
+						else if (playerLastHit == 2) {j1->setPoint();pontoJ1 = true;}
+						else j2->setPoint();
+
+						// #####		Apito do arbitro que indica que houve ponto		################
+						PlaySound(TEXT("SOUNDS\\REFEREEWHISTLE.WAV"), NULL, SND_ASYNC);
+
+						fstHitGround = false;
+
+
+						if (pontoJ1) {
+							position = positionToP1; 
+							velocity = velocityToP1;
+							startPlay=true;
+						}
+						else {
+							position = positionToP2; 
+							velocity = velocityToP2;
+							startPlay=true;
+						}
+				}
+			}
+
+			if(velocity.x > 15) velocity.x = 15;
+			else if(velocity.x < -15) velocity.x = -15;
+			if(velocity.y > 28) velocity.y = 28;
+			if(velocity.z > 15) velocity.z = 15;
+			else if(velocity.z < -15) velocity.z = -15;
+		}
 	}
 }

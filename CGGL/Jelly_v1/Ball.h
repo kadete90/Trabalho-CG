@@ -16,9 +16,12 @@ class Ball : public cggl::Object {
   Jelly * j2;
   cggl::ObjModel* model;
   int hitTimeBlock,strenghHit;
-  int playerLastHit;
+  int playerLastHit,lastPlayerNumberOfHits;
   boolean fstHitGround;
-  bool * gameOver;
+  bool * gameOver,startPlay;
+  char startPlayP1,startPlayP2;
+
+  int maxHitsPerPlayer;
 
 public: 
   Ball(cggl::Vector3 pos, float rad, Jelly * _j1,Jelly * _j2,bool* gameOver );
