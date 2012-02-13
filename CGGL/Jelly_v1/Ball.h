@@ -18,13 +18,13 @@ class Ball : public cggl::Object {
   int hitTimeBlock,strenghHit;
   int playerLastHit,lastPlayerNumberOfHits;
   boolean fstHitGround;
-  bool * gameOver,startPlay;
+  bool * gameOver,startPlay,*useSound;
   char startPlayP1,startPlayP2;
 
   int maxHitsPerPlayer;
 
 public: 
-  Ball(cggl::Vector3 pos, float rad, Jelly * _j1,Jelly * _j2,bool* gameOver );
+  Ball(cggl::Vector3 pos, float rad, Jelly * _j1,Jelly * _j2,bool* _gameOver,bool* _useSound,int maxHitsPerPlayer);
 
   void InitGL();
   void Update(int deltaTimeMilis);

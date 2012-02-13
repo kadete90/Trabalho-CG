@@ -22,7 +22,7 @@ void SimplePlan::Draw() {
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambientColor);
     glNormal3f(0, 1, 0);
     glBegin(GL_QUADS);
-		if(invertImage){
+	if(invertImage){
 		  glTexCoord2f(0, 1);
 		  glVertex3f(+width, 0, +height);
 		  glTexCoord2f(0, 0);

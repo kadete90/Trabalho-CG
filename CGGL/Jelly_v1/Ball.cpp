@@ -4,7 +4,7 @@
 #include <dos.h> // ter o SLEEP
 using namespace cggl;
 
-Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2,bool* _gameOver ): position(pos), radius(rad),j1(_j1),j2(_j2),gameOver(_gameOver){
+Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2,bool* _gameOver,bool* _useSound,int _maxHitsPerPlayer ): position(pos), radius(rad),j1(_j1),j2(_j2),gameOver(_gameOver),useSound(_useSound),maxHitsPerPlayer(_maxHitsPerPlayer){
 	model = new ObjModel("models/whiteBall.obj");
 	radiusShadow = radius * .8 + position.y*.05;
 	positionToP1 = Vector3(-25,25,0);
@@ -12,15 +12,14 @@ Ball::Ball(Vector3 pos, float rad, Jelly * _j1,Jelly * _j2,bool* _gameOver ): po
 	velocityToP1 = Vector3(4,6,0); 
 	velocityToP2 = Vector3(-4,6,0);
 	angleZ = 20;
-	angleX =0;
-	hitTimeBlock =0;
+	angleX = 0;
+	hitTimeBlock = 0;
 	strenghHit = 2,5;
 	fstHitGround = false;
 	startPlay = true;
 	playerLastHit  =-1;
 	startPlayP1='q';
-	startPlayP2='l';
-	maxHitsPerPlayer=5;
+	startPlayP2='.';
 }
 
 void Ball::InitGL() { 
@@ -88,12 +87,9 @@ void Ball::Update(int deltaTimeMilis){
 			if(App::Input->IsKeyPressed(startPlayP2)) { startPlay=false;}
 		}
 		else{
-
 			velocity.x += 2*(ax * t);
 			velocity.y += 2*(ay * t);
 			velocity.z += 2*(az * t);
-
-
 
 			position.y = position.y + velocity.y*t + 0.5 * ay * t * t;
 			position.x += velocity.x*t;
@@ -101,6 +97,8 @@ void Ball::Update(int deltaTimeMilis){
 
 			boolean hitBlock=false;
 
+			// Calculos para saber quando bate num jogador
+			// Foi feito um bloco contador para diminuir as chamadas ao hit e assim optimizar o jogo
 			if(hitTimeBlock <= 0 && !fstHitGround ){
 				vj1 = j1->hitJelly(position.x,position.y,position.z);
 				vj2 = j2->hitJelly(position.x,position.y,position.z);
@@ -110,7 +108,7 @@ void Ball::Update(int deltaTimeMilis){
 					if (playerLastHit ==1 ) lastPlayerNumberOfHits++;
 					else					lastPlayerNumberOfHits=1;
 					if (lastPlayerNumberOfHits == maxHitsPerPlayer){
-						PlaySound(TEXT("SOUNDS\\FOUL.WAV"), NULL, SND_ASYNC);
+						if (*useSound) PlaySound(TEXT("SOUNDS\\FOUL.WAV"), NULL, SND_ASYNC);
 						j2->setPoint();
 						position = positionToP2; 
 						velocity = velocityToP2;
@@ -129,7 +127,7 @@ void Ball::Update(int deltaTimeMilis){
 					if (playerLastHit ==2 ) lastPlayerNumberOfHits++;
 					else					lastPlayerNumberOfHits=1;
 					if (lastPlayerNumberOfHits == maxHitsPerPlayer){
-						PlaySound(TEXT("SOUNDS\\FOUL.WAV"), NULL, SND_ASYNC);
+						if (*useSound) PlaySound(TEXT("SOUNDS\\FOUL.WAV"), NULL, SND_ASYNC);
 						j1->setPoint();
 						position = positionToP1; 
 						velocity = velocityToP1;
@@ -137,36 +135,38 @@ void Ball::Update(int deltaTimeMilis){
 					}
 					playerLastHit=2;
 					if(velocity.x >0) velocity.x = vj2.x*-1; 
-					else velocity.x = vj2.x*-1;
+					else velocity.x = vj2.x;
 					velocity.x*= vj2.x * strenghHit;
 					velocity.y*= vj2.y * strenghHit;
 					velocity.z =-vj2.z * strenghHit;
 				}
 			}
-
-
 			if(hitBlock) hitTimeBlock = 20;
 			else --hitTimeBlock;
 
+			// calulos para fazer a bola rodar
 			angleZ -= velocity.x;
 			angleX -= -velocity.z;
-			radiusShadow = radius * .8 + position.y*.05;
 
+			// Perde velocidade quando bate na areia
 			if(position.y <= radius){
 				position.y = radius;
 				velocity.y = -velocity.y/2.5 ;
 				velocity.x = velocity.x/1.2 ;
 				velocity.z = velocity.z/1.2 ;
 			}
-			if(position.x >= -radius && position.x <= radius){
-				if( position.y < 15-radius && position.z >= -17 && position.z <=17){
-					printf("Erro! 1");
+
+			// calculos para quando bate na rede
+			if(position.x >= -(radius +.5) && position.x <= radius + .5){
+				if( position.y < 15.5-radius && position.z >= -17 && position.z <=17){
 					velocity.y = velocity.y*0.8;
-					velocity.x = (position.y >10)?-velocity.x: -velocity.x*0.5;
+					if(position.x > 0)
+						velocity.x = (position.y >10)? -velocity.x : 5 ;
+					else
+						velocity.x = (position.y >10)? -velocity.x : -5 ;
 				}
-				else if(position.y >= 15-radius && position.y < 15 && position.z > -17 && position.z < 17){
+				else if(position.y >= 15.5-radius && position.y < 15.5 && position.z > -17 && position.z < 17){
 					velocity.y = -velocity.y;
-					printf("Erro! 2");
 				}
 			}
 
@@ -187,7 +187,7 @@ void Ball::Update(int deltaTimeMilis){
 						else j2->setPoint();
 
 						// #####		Apito do arbitro que indica que houve ponto		################
-						PlaySound(TEXT("SOUNDS\\REFEREEWHISTLE.WAV"), NULL, SND_ASYNC);
+						if (*useSound) PlaySound(TEXT("SOUNDS\\REFEREEWHISTLE.WAV"), NULL, SND_ASYNC);
 
 						fstHitGround = false;
 
@@ -211,5 +211,6 @@ void Ball::Update(int deltaTimeMilis){
 			if(velocity.z > 15) velocity.z = 15;
 			else if(velocity.z < -15) velocity.z = -15;
 		}
+		radiusShadow = radius * .8 + position.y*.05;
 	}
 }

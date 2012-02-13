@@ -3,8 +3,8 @@
 
 using namespace cggl;
 
-Jelly::Jelly(const Vector3& pos, const float _width, const float _height, const int _player,bool * _gameOver,char _leftKey, char _rightKey,char _upKey, char _downKey,char _jumpKey) 
-	: position(pos), width(_width),height(_height), player(_player),leftKey(_leftKey),rightKey(rightKey),upKey(_upKey),downKey(_downKey), jumpKey(_jumpKey),gameOver(_gameOver) {
+Jelly::Jelly(const Vector3& pos, const float _width, const float _height, const int _player,bool * _gameOver,int _pointsToWin,char _leftKey, char _rightKey,char _upKey, char _downKey,char _jumpKey) 
+	: position(pos), width(_width),height(_height), player(_player),leftKey(_leftKey),rightKey(rightKey),upKey(_upKey),downKey(_downKey), jumpKey(_jumpKey),gameOver(_gameOver),pointsToWin(_pointsToWin) {
 		bodyRadius = .75; sphereSlicesAndStacks = 30;
 		radiusShadow = bodyRadius * width*.8 + position.y*0.1;
 		jump = false, hitTheGround = false;
@@ -39,6 +39,7 @@ void Jelly::Draw(){
 	glPopMatrix();
 
 	// draw shadow
+	radiusShadow = bodyRadius * width*.8 + position.y*0.1;
 	glPushMatrix();
 	glColor3f(.2, .2, .2 );
 	glTranslated(position.x, .01, position.z);
@@ -52,13 +53,12 @@ void Jelly::Draw(){
 	glEnd();
 	glPopMatrix();
 }
-
 void Jelly::Update(int deltaTimeMilis){
 	Object::Update(deltaTimeMilis);
 
 	if (!(*gameOver)){
 
-		float velocityxz = (position.y > 0)? .25: .35;
+		float velocityxz = (position.y > 0)? .2: .3;
 
 		int xMax = 50;
 		int xMin = 3.5;
@@ -92,10 +92,6 @@ void Jelly::Update(int deltaTimeMilis){
 			position.y += velocity.y*t + 0.5 * ay * t * t;
 			if(position.y < 0) position.y = 0;
 		}
-
-		radiusShadow = bodyRadius * width*.8 + position.y*0.1;
-
-
 		if(jump && position.y == 0){
 			hitTheGround = true;
 			hitTimeGround = 40;
@@ -104,12 +100,12 @@ void Jelly::Update(int deltaTimeMilis){
 		if(hitTheGround && hitTimeGround > 0 ){
 			if(!jump){
 				if(hitTimeGround <= 20){
-					heigthVariable +=0.025;
-					widthVariable -= 0.04;
+					heigthVariable +=.025;
+					widthVariable -= .04;
 				}
 				else{
-					heigthVariable -= 0.025;
-					widthVariable += 0.04;
+					heigthVariable -= .025;
+					widthVariable += .04;
 				}
 				--hitTimeGround;
 				if(hitTimeGround == 0)
@@ -124,15 +120,15 @@ void Jelly::Update(int deltaTimeMilis){
 		else
 			heigthVariable = (position.y == 0)? height  : heigthVariable + velocity.y/1000;
 	}
+	radiusShadow = bodyRadius * width*.8 + position.y*0.1;
 }
 
 cggl::Vector3 Jelly::hitJelly(float x,float y, float z){
 	float eq;
 	eq = pow((x - position.x),2) + pow((y - (position.y+height)),2) + pow((z - position.z),2) - (height*height);
 	if(eq <= 0 ) {
-		return Vector3(fabs(position.x)-fabs(x),-(y/(position.y+height*2)+0.1),position.z-z);
+		return Vector3(fabs(position.x)-fabs(x),-(y/(position.y+height*2) + .1),position.z-z);
 	}
-
 	else return Vector3(-10,-10,-10);
 
 }
@@ -150,5 +146,5 @@ char Jelly::getDownKey(){return downKey;}
 char Jelly::getJumpKey(){return jumpKey;}
 void Jelly::resetTouchNumber(){touchNumber=1;}
 void Jelly::increaseTouchNumber(){touchNumber++;}
-boolean Jelly::hasWon(){return points == 10;}
+boolean Jelly::hasWon(){return points == pointsToWin;}
 int Jelly::getTouchNumber(){return touchNumber;}
