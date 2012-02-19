@@ -11,23 +11,25 @@
 using namespace cggl;
 
 void JellyApp::CreateScene() {
-	RegisterObject(p1 = new Jelly(Vector3(-15, 0, 0), 3.5, 4, 1,&gameOver,gamesToWin,'a','d','w','s','e')) ;
-	RegisterObject(p2 = new Jelly(Vector3(15, 0, 0), 3.5, 4, 2 ,&gameOver,gamesToWin,(char)GLUT_KEY_LEFT,(char)GLUT_KEY_RIGHT,(char)GLUT_KEY_UP,(char)GLUT_KEY_DOWN,'0')) ;
+	RegisterObject(p1 = new Jelly(Vector3(-22, 0, 0), 3.5, 4, 1,&gameOver,gamesToWin,'a','d','w','s','e')) ;
+	RegisterObject(p2 = new Jelly(Vector3(22, 0, 0), 3.5, 4, 2 ,&gameOver,gamesToWin,(char)GLUT_KEY_LEFT,(char)GLUT_KEY_RIGHT,(char)GLUT_KEY_UP,(char)GLUT_KEY_DOWN,'0')) ;
 	RegisterObject(net = new Net(Vector3(0, 5, 0), 20) ) ;
 	RegisterObject(ball = new Ball(Vector3(0, 20, 0), 1.2, p1, p2, &gameOver,&useSound,maxHitsPerPlayer) );
-	RegisterObject(new SimplePlan(100, 100, Vector3(0,0,0), Vector3(0,0,0),"textures/sandBeach2.jpg", 0) ); // width, height, rotate, pos, texture
-	RegisterObject(new SimplePlan(100, 65, Vector3(-1,0,0), Vector3(0,65,-100),"textures/background.jpg", 0) );
-	RegisterObject(new SimplePlan(100, 65, Vector3(-1,0,1), Vector3(100,65,0),"textures/background.jpg", 0) );
+	RegisterObject(new SimplePlan(100, 100, Vector3(0,0,0), Vector3(0,0,-200),"textures/sandBeach.jpg", 0) ); // width, height, rotate, pos, texture
+	RegisterObject(new SimplePlan(100, 100, Vector3(0,0,0), Vector3(0,0,0),"textures/sandBeach2.jpg", 0) ); // width, height, rotate, pos, texture	
+	RegisterObject(new SimplePlan(100, 65, Vector3(-1,0,0), Vector3(0,65,-200),"textures/background.jpg", 0) );
+	RegisterObject(new SimplePlan(150, 65, Vector3(-1,0,1), Vector3(100,65,-50),"textures/background.jpg", 0) );
 	glPushMatrix();
-	glRotated(180, 0,1,0);
-	RegisterObject(new SimplePlan(100, 65, Vector3(-1,0,1), Vector3(-100,65,0),"textures/background.jpg", 1) );
+		glRotated(180, 0,1,0);
+		RegisterObject(new SimplePlan(150, 65, Vector3(-1,0,1), Vector3(-100,65,-50),"textures/background.jpg", 1) );
 	glPopMatrix();
 	RegisterObject(new FPSCounter() );
 	setKeyBoardHorizontal();
 	sprintf(txtCamera,"Camera [1]");
-	_eye = Vector3(0, 60, 90); 
+	_eye = Vector3(0, 60, 120); 
 	_center = Vector3(0,0,-50);
 	_up = Vector3::UP;
+	followBall = false;
 }
 
 void JellyApp::Draw() {
@@ -41,13 +43,13 @@ void JellyApp::Draw() {
 	else
 		glColor3f(1, 0, 0);
 	App::Writer->BeginWriteText();
-	App::Writer->WriteText((aux)? xScore-30: xScore-80, 50, txt, GLUT_BITMAP_TIMES_ROMAN_24);
+	App::Writer->WriteText((aux)? xScore-30: xScore-80, 60, txt, GLUT_BITMAP_TIMES_ROMAN_24);
 	if (txt2 != "") {
 		glColor3f(0, 0, 0);
-		App::Writer->WriteText(xScore-75,  80, txt2, GLUT_BITMAP_HELVETICA_18);
+		App::Writer->WriteText(xScore-75,  90, txt2, GLUT_BITMAP_HELVETICA_18);
 	}
 	glColor3f(0, 0, 0);
-	App::Writer->WriteText(20, 30, txtCamera, GLUT_BITMAP_HELVETICA_18);
+	App::Writer->WriteText(10, 20, txtCamera, GLUT_BITMAP_HELVETICA_12);
 	App::Writer->EndWriteText();
 }
 
@@ -65,13 +67,8 @@ void JellyApp::Update(int deltaTimeMilis) {
 	else{
 		sprintf(txt2, "%s", "");
 		if(App::Input->IsKeyPressed('x')) exit(0);
-		if(App::Input->IsKeyPressed('b')){
-			sprintf(txtCamera,"Camera following ball");
-			_eye = Vector3(0, 20, 60); 
-			_center = ball->getPosition(); 
-			_up = Vector3(0,1,0);
-		}
 		else if(App::Input->IsKeyPressed('1')){
+			followBall = false;
 			setKeyBoardHorizontal();
 			sprintf(txtCamera,"Camera [1]");
 			_eye = Vector3(0, 60, 90); 
@@ -79,6 +76,7 @@ void JellyApp::Update(int deltaTimeMilis) {
 			_up = Vector3::UP;
 		}
 		else if(App::Input->IsKeyPressed('2')){
+			followBall = false;
 			setKeyBoardHorizontal();
 			sprintf(txtCamera,"Camera [2]");
 			_eye = Vector3(0, 120, .1); 
@@ -86,6 +84,7 @@ void JellyApp::Update(int deltaTimeMilis) {
 			_up = Vector3::UP;
 		}
 		else if(App::Input->IsKeyPressed('3')){
+			followBall = false;
 			setKeyBoardVertical();
 			sprintf(txtCamera,"Camera [3]");
 			_eye = Vector3(50, 90, .3);
@@ -93,6 +92,7 @@ void JellyApp::Update(int deltaTimeMilis) {
 			_up = Vector3::UP;
 		}
 		else if(App::Input->IsKeyPressed('4')){
+			followBall = false;
 			setKeyBoardHorizontal();
 			sprintf(txtCamera,"Camera [4]");
 			_eye = Vector3(50, 100, 300);
@@ -100,6 +100,7 @@ void JellyApp::Update(int deltaTimeMilis) {
 			_up = Vector3::UP;
 		}
 		else if(App::Input->IsKeyPressed('5')){
+			followBall = false;
 			setKeyBoardVertical();
 			sprintf(txtCamera,"Camera [5]");
 			_eye = Vector3(100, 100, .3);
@@ -107,14 +108,22 @@ void JellyApp::Update(int deltaTimeMilis) {
 			_up = Vector3::UP;
 		}
 		else if(App::Input->IsKeyPressed('6')){
+			followBall = false;
 			setKeyBoardHorizontal();
 			sprintf(txtCamera,"Camera [6]");
 			_eye = Vector3(00, 20, 90); 
 			_center = Vector3(0,20,0); 
 			_up = Vector3::UP;
 		}
+		if(App::Input->IsKeyPressed('b')){
+			setKeyBoardHorizontal();
+			followBall = true;
+			sprintf(txtCamera,"Camera following ball");
+			_eye = Vector3(0, 20, 60);
+			_up = Vector3(0,1,0);
+		}
 
-		App::Camera->LookAt(_eye, _center,_up);
+		App::Camera->LookAt(_eye, (followBall)?ball->getPosition():_center,_up);
 
 		if (p1->hasWon()){
 			sprintf(txt, "%s", "PLAYER 1 WINS");
@@ -183,59 +192,59 @@ int main(int argc, char** argv){
 	printf("     . .        .    . .  .MM           .     .  .      .          .   MM      \n");
 	printf("                        MMMN                                       .?MMM,      \n");                                                                    
 	printf("...............................................................................\n\n");
-	printf(" Teclas do jogador 1 (verde): \n\t LEFT: A | RIGHT: D | DOWN: S | UP: W \n\t JUMP: E | LetBall: Q \n\n"); 
-	printf(" Teclas do jogador 2 (vermelho): \n\t LEFT : LEFT KEY | RIGHT : RIGHT KEY | DOWN : DOWN KEY | UP: UP KEY \n\t JUMP: 0 | LetBall: . \n\n");
-
+	printf(" Teclas do jogador 1 (verde): \n\t LEFT: A | RIGHT: D | DOWN: S | UP: W \n\t JUMP: E | LETBALL: Q \n\n"); 
+	printf(" Teclas do jogador 2 (vermelho): \n\t LEFT - LEFT KEY | RIGHT - RIGHT KEY | DOWN : DOWN KEY | UP: UP KEY \n\t JUMP: 0 | LETBALL: DOT (.) \n\n");
+	printf(" Junto a rede (Ambos Jogadores): Remate: JUMPKEY | Amorti: (JUMPKEY + LETBALL) \n\n"); 
 	app.setUseSound(true);
 	app.setGamesToWin(10);
 	app.setMaxHitsPerPlayer(5);
 
 	int op;
 	int aux =0;
-	printf(" MENU : (Insert number of option)\n Option 0 :Exit menu \n Option 1 : Enable sound \n Option 2 : Disable sound \n ");
-	printf("Option 3 : Change number of points to win the match \n Option 4 : Change number of hits per player\n");
+	printf(" MENU : (Insert number of option)\n Option 0 : Exit menu \n Option 1 : Enable sound \n Option 2 : Disable sound \n");
+	printf(" Option 3 : Change number of points to win the match \n Option 4 : Change number of hits per player\n\n");
 		
 	do{
+		printf(" > "); 
 		fscanf(stdin,"%d",&op);
 		switch (op){
 		case 0:
-			printf("\n \n Configuration sucessfull !\n ");
+			printf("\n Configuration sucessfull !\n ");
 			break;
 		case 1:
 			app.setUseSound(true);
-			printf("Sound enabled !\n");
+			printf(" Sound enabled !\n");
 			break;
 		case 2:
 			app.setUseSound(false);
-			printf("Sound disabled!\n");
+			printf(" Sound disabled!\n");
 			break;
 		case 3:
-			printf("Set number of points to win match.\n");
+			printf(" Set number of points to win match.\n");
+			printf(" > "); 
 			fscanf(stdin,"%d",&aux);
 			if (aux >=1 ){
 				app.setGamesToWin(aux);
-				printf("The player that scores %d points first, win. \n",aux);}
+				printf(" The player that scores %d points first, win. \n",aux);}
 			else
-				printf("Number of points invalid. The player that scores %d points first, win. \n",app.getGamesToWin());
+				printf(" Number of points invalid. The player that scores %d points first, win. \n",app.getGamesToWin());
 			break;
 		case 4:
-			printf("Set how many times a player can touch the ball per turn.\n");
+			printf(" Set how many times a player can touch the ball per turn.\n");
+			printf(" > "); 
 			fscanf(stdin,"%d",&aux);
 			if (aux >2 ){
 				app.setMaxHitsPerPlayer(aux);
-				printf("One player can only touch the ball %d times per turn\n",aux);}
+				printf(" One player can only touch the ball %d times per turn\n",aux);}
 			else 
-				printf("That value is too low. The maximum touch per turn will be %d.\n",app.getMaxHitsPerPlayer());
+				printf(" That value is too low. The maximum touch per turn will be %d.\n",app.getMaxHitsPerPlayer());
 			break;
 		default:
-			printf("Invalid Option");
+			printf(" Invalid Option!");
 		}
 	}while (op!=0);
 
-	printf("\n\n Sound %s \n PointsToWin %d \n Touch per Player %d \n\n",(app.getUseSound())? "enable" : "disable",app.getGamesToWin(),app.getMaxHitsPerPlayer());
-
-
-
+	printf("\n Sound %s \n PointsToWin %d \n Touch per Player %d \n\n ",(app.getUseSound())? "enable" : "disable",app.getGamesToWin(),app.getMaxHitsPerPlayer());
 	system("PAUSE");
 	app.Run(argc, argv);
 }

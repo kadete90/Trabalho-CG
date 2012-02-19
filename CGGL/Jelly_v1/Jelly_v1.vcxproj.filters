@@ -41,10 +41,10 @@
     <ClCompile Include="Jelly.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Net.cpp">
+    <ClCompile Include="SimplePlan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SimplePlan.cpp">
+    <ClCompile Include="Net.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

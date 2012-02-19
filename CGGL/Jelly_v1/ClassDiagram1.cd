@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Ball">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAIhAACBAAA4BAgAIAIIAAAEQAAFAAACQIQABMAIA=</HashCode>
+      <FileName>Ball.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jelly">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QBQCAACAAiAgA46KQYBEoAGAAMgCQAEBAAQIAGAiIKA=</HashCode>
+      <FileName>Jelly.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SimplePlan">
+    <Position X="3.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAgQAQAAQMAAAAAAAAhAAAEAAAAAAAAA=</HashCode>
+      <FileName>SimplePlan.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="JellyApp">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BARAoAAEAAEAAgAAAAAgAEwAAAEAAAgEgEAASAMEUIA=</HashCode>
+      <FileName>JellyApp.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Net">
+    <Position X="2" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAqQAAIAAIAAAAAAAABAAAAAAAAAIAAA=</HashCode>
+      <FileName>Net.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

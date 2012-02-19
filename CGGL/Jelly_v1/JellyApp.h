@@ -10,11 +10,11 @@ class JellyApp : public cggl::App {
 	Jelly * p1;
 	Jelly * p2;
 	Net * net;
-	char txt[20];
+	char txt[25];
 	char txt2[25];
-	char txtCamera[20];
+	char txtCamera[25];
 	bool gameOver, useSound;
-	int gamesToWin, maxHitsPerPlayer;
+	int gamesToWin, maxHitsPerPlayer, followBall;
 	cggl::Vector3 _eye;
 	cggl::Vector3 _center;
 	cggl::Vector3 _up;

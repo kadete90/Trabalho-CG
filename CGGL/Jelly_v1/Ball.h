@@ -11,16 +11,16 @@ class Ball : public cggl::Object {
   cggl::Vector3 position,positionToP1,positionToP2 ;
   cggl::Vector3 velocity,velocityToP1,velocityToP2 ; 
   cggl::Vector3 lastPosHitGround;
-  float radius, radiusShadow, angleX,angleZ;
+  float radius, radiusShadow, lastRadiusShadow, angleX,angleZ;
   Jelly * j1;
   Jelly * j2;
   cggl::ObjModel* model;
-  int hitTimeBlock,strenghHit;
+  int hitTimeBlock, hitTimePlayer;
   int playerLastHit,lastPlayerNumberOfHits;
-  boolean fstHitGround;
+  bool fstHitGround, hasHitPlayer;
   bool * gameOver,startPlay,*useSound;
   char startPlayP1,startPlayP2;
-
+  float strenghHit;
   int maxHitsPerPlayer;
 
 public: 
@@ -29,9 +29,10 @@ public:
   void InitGL();
   void Update(int deltaTimeMilis);
   void Draw();
-
+  void drawShadow(GLfloat *color, cggl::Vector3 pos, float _radiusShadow);
   cggl::Vector3 getPosition() { return position; }
   cggl::Vector3& GetVelocity() { return velocity; }
+
 
 };
 

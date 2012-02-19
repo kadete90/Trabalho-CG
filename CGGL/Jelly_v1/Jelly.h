@@ -7,14 +7,12 @@
 
 class Jelly : public cggl::Object {
 
-  cggl::Vector3 position, velocity;
-  float width, height, radiusShadow, heigthVariable, widthVariable, hitTimeGround;
-  boolean jump, hitTheGround;
-  int player, points, velocityJump,touchNumber,pointsToWin;
+  cggl::Vector3 position,resetPos, velocity;
+  float width, height, radiusShadow, heigthVariable, widthVariable;
+  int player, points, velocityJump,touchNumber,pointsToWin, jellyTimeShake;
   GLfloat bodyRadius;
   GLint sphereSlicesAndStacks;
-  bool * gameOver;
-  
+  bool * gameOver, hitTheGround, jump;
   
 public: 
   char leftKey, rightKey, upKey, downKey, jumpKey;
@@ -26,7 +24,7 @@ public:
   cggl::Vector3& GetPosition()  { return position; };
   cggl::Vector3 hitJelly(float x,float y, float z);
   void setPoint();
-   void resetPoint();
+  void resetPoint();
   int getPoints();
   int getPlayer();
   int Jelly::getHeight();
@@ -39,8 +37,11 @@ public:
   char getJumpKey();
   void increaseTouchNumber();
   void resetTouchNumber();
-  boolean hasWon();
+  bool getJump();
+  bool hasWon();
   int getTouchNumber();
+  void Jelly::resetPosition();
+  void Jelly::shakeJelly(bool hitByBall);
 };
 
 #endif
